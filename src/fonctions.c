@@ -19,7 +19,7 @@
 
 // Avancer en fonction d'une distance en cm et d'une vitesse
 // Speed: positif = avance, négatif = recule
-void cmMove(float cm, float speed)
+void CmMove(float cm, float speed)
 {
     int nbrTour = (cm * PULSEPARTOUR) / CIRCONFERENCE;
     ENCODER_ReadReset(GAUCHE);

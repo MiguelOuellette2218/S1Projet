@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <LibRobus.h>
 
+#include "functions.h"
+
 #define PIN13 13
 
 void setup() {
@@ -15,6 +17,7 @@ void setup() {
 }
 
 void loop() {
+  //CmMove(100, 0.5);
   if (ROBUS_IsBumper(2))
   {
     MOTOR_SetSpeed(0, -0.5);
@@ -42,5 +45,6 @@ void loop() {
     MOTOR_SetSpeed(0, 0.5);
     delay(1000);
     MOTOR_SetSpeed(0, 0);
-  }  
+  }
+  
 }
