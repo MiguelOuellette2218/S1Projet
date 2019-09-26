@@ -1,9 +1,4 @@
-#include <Arduino.h>
-#include <LibRobus.h>
-
-#include "functions.h"
-
-#define PIN13 13
+#include"MyIncludes.h"
 
 void setup() {
   // put your setup code here, to run once:
@@ -48,3 +43,6 @@ void loop() {
   }
   
 }
+
+
+
