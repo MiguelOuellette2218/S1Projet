@@ -50,7 +50,7 @@ void AdjustSpeed(int gauche, int droit, float* pSpeed)
         if(pSpeed[1] > 0.00001)pSpeed[1]-=0.00001;
         else pSpeed[0] += 0.00001;
     }
-    else if(gauche < droit)
+    else
     {
         if(pSpeed[0] > 0.00001)pSpeed[0]-=0.00001;
         else pSpeed[1] += 0.00001;
