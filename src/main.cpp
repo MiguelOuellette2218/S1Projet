@@ -1,47 +1,35 @@
 #include"MyIncludes.h"
 
+#define CIRCONFERENCE 24.25
+
 void setup() {
   // put your setup code here, to run once:
 
   BoardInit();
 
-  pinMode(PIN13 , OUTPUT); 
   Serial.begin(9600);
 
   delay(1500);
 }
 
 void loop() {
-  //CmMove(100, 0.5);
-  if (ROBUS_IsBumper(2))
+  if (ROBUS_IsBumper(2)) //Bumper Avant
   {
-    MOTOR_SetSpeed(0, -0.5);
-    MOTOR_SetSpeed(1, -0.5);
-    delay(4000);
-    MOTOR_SetSpeed(0, 0);
-    MOTOR_SetSpeed(1, 0);
+
   }
-  if (ROBUS_IsBumper(3))
+  if (ROBUS_IsBumper(3)) //Bumper arrière
   {
-    MOTOR_SetSpeed(0, 0.5);
-    MOTOR_SetSpeed(1, 0.5);
-    delay(4000);
-    MOTOR_SetSpeed(0, 0);
-    MOTOR_SetSpeed(1, 0);
+    avancerCm(200);
   }
-  if (ROBUS_IsBumper(0))
+  if (ROBUS_IsBumper(0)) // Bumper gauche
   {
-    MOTOR_SetSpeed(1, 0.5);
-    delay(1000);
-    MOTOR_SetSpeed(1, 0);
+
   }
-  if (ROBUS_IsBumper(1))
+  if (ROBUS_IsBumper(1)) // Bumper droite
   {
-    MOTOR_SetSpeed(0, 0.5);
-    delay(1000);
-    MOTOR_SetSpeed(0, 0);
+
   }
-  
+  delay(200);
 }
 
 

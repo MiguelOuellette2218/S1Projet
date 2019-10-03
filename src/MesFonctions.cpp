@@ -1,19 +1,87 @@
 
 #include"MyIncludes.h"
 
-void CmMove(float cm, float speed)
+#define CIRCONFERENCE 24.25 //23,94 selon le wiki de LibRobus
+#define PULSEPARTOUR 3200 // Nombre de pulse des encodeur par tour de roue
+#define DELAY 20 // en ms
+#define KP 0.0003
+#define KI 0.000002
+
+/*
+* Fonction qui permet de faire avancer le robot en fonction d'une distance
+* float distance : distance en cm
+*/
+void avancerCm(float distance)
 {
-    int nbrTour = (cm * PULSEPARTOUR) / CIRCONFERENCE;
-    ENCODER_ReadReset(GAUCHE);
-    ENCODER_ReadReset(DROIT);
+    int32_t pulse_distance = nbrPulses(distance);
+    int32_t nbr_pulse = 0;
+    int32_t vitesse_cible = setSetpoint(distance, DELAY, 0.5);
 
+    float pwmL = 0;
+    float pwmR = 0;
 
-    while (ENCODER_Read(GAUCHE) != nbrTour && ENCODER_Read(DROIT) != nbrTour)
+    while(nbr_pulse < pulse_distance)
     {
-        MOTOR_SetSpeed(GAUCHE, speed);
-        MOTOR_SetSpeed(DROIT, speed);
+        ENCODER_Reset(LEFT);
+        ENCODER_Reset(RIGHT);
+
+        // Définition de la vitesse
+        MOTOR_SetSpeed(LEFT, pwmL);
+        MOTOR_SetSpeed(RIGHT, pwmR);
+
+        delay(DELAY);
+
+        // Correction de la vitesse
+        pwmL += corrige_vitesse(LEFT, vitesse_cible);
+        pwmR += corrige_vitesse(RIGHT, vitesse_cible);
+
+        nbr_pulse += ENCODER_Read(LEFT);
     }
 
-    MOTOR_SetSpeed(GAUCHE, 0);
-    MOTOR_SetSpeed(DROIT, 0);    
+    // Arrêt des moteurs
+    MOTOR_SetSpeed(LEFT, 0);
+    MOTOR_SetSpeed(RIGHT, 0);
+}
+
+/*
+* Corrige la vitesse
+* int motor : moteurs à corriger
+* int32_t vitesse en pulse par seconde
+*/
+float corrige_vitesse(int motor, int32_t vitesse_cible)
+{
+    static float erreurAcc[2] = {0};
+
+    float erreur =  vitesse_cible - ENCODER_Read(motor);
+    erreurAcc[motor] += erreur;
+
+    float correction = (erreur * KP) + (erreurAcc[motor] * KI);
+
+    return correction;
+}
+
+/*
+* Fonction qui défini le nombre de pulse nécésaire pour une distance
+* float cm : distance en cm
+*/
+int32_t nbrPulses(float cm)
+{
+    return (cm * PULSEPARTOUR) / CIRCONFERENCE;
+}
+
+/*
+* Fonction qui défini le setpoint (Nombre de pulse théorique par cycle)
+* float cm : distance en cm
+* float cycle : temps d'un cycle en ms
+* float speed : vitesse en m/s, ne peut pas aller plus haut que 1 ou -1 m/s
+*/
+int32_t setSetpoint(float cm, float cycle, float speed)
+{
+    if(speed > 1 && speed < 1) // Limite de vitesse de 1 m/s
+    {
+        return -1;
+    }
+
+    int32_t pulses = nbrPulses(cm);
+    return (pulses * (cycle / 1000)) / (1 / speed);
 }
