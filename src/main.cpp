@@ -11,8 +11,10 @@ void setup() {
 
 void loop() 
 {
-  CmMove(100, 0.5);
-  while(1);
+  //CmMove(200, 0.5);
+  TurnNoMoving(0.25,8,1);
+  delay(2000);
+  
 }
 
 
