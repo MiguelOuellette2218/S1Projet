@@ -1,23 +1,39 @@
 
 #include"MyIncludes.h"
 
-void CmMove(float cm, float speed)
+void CmMove(float cm, float* speed)
 {
-    int nbrTour = (cm * PULSEPARTOUR) / CIRCONFERENCE;
+    int pulseDistance = (cm * PULSEPARTOUR) / CIRCONFERENCE;
     ENCODER_ReadReset(LEFT);
     ENCODER_ReadReset(RIGHT);
+    //Init des variables
     int lastLeft = 0;
     int lastRight = 0;
     int newLeft = 0;
     int newRight = 0;
     float pSpeed [2] = {1,1};//pSpeed[0]=Speed Gauche //pSpeed[1]=Speed Droit
-    float speed2 = speed / 20;
+    float speed1 = speed[0] / 25;
+    float speed2 = speed[1] / 25;
+    float ralentissement = 0;
 
-
-    while ((ENCODER_Read(LEFT) < nbrTour) && (ENCODER_Read(RIGHT) < nbrTour))
+    while ((ENCODER_Read(LEFT) < pulseDistance) && (ENCODER_Read(RIGHT) < pulseDistance))
     {
-        delay(20);
-        if(speed2 < speed)speed2 += speed / 20;     //Accélération
+        delay(10 / speed2);
+        if(ENCODER_Read(LEFT) < pulseDistance - PULSEPARTOUR)
+        {
+            if(speed1 < speed[0])
+            {
+                speed1 += speed[0] / 25;        //Accélération
+                speed2 += speed[1] / 25;
+            }
+        }
+        else
+        {                                       //speed1 -= speed1/25;
+            ralentissement += (0.005 /(ralentissement + speed1));    //Ralentissement
+            ralentissement += (0.005 /(ralentissement + speed2));
+            if(ralentissement > speed1)ralentissement = speed1;
+            else if(ralentissement > speed2)ralentissement = speed2;
+        } 
         
         lastLeft = newLeft;     //Enregistre les anciennes valeurs avant de relire
         lastRight = newRight;   
@@ -31,12 +47,14 @@ void CmMove(float cm, float speed)
             Serial.println(" ");
         //ADJUST AND SET SPEED
         AdjustSpeed(newLeft - lastLeft,newRight - lastRight,pSpeed, speed2);
-        MOTOR_SetSpeed(LEFT, speed2 * pSpeed[0]);
-        MOTOR_SetSpeed(RIGHT, speed2 * pSpeed[1]);
+        MOTOR_SetSpeed(LEFT, speed1 * pSpeed[0] - ralentissement);
+        MOTOR_SetSpeed(RIGHT, speed2 * pSpeed[1] - ralentissement);
     }
     //TURN TO 0 MOTORS
     MOTOR_SetSpeed(LEFT, 0);
-    MOTOR_SetSpeed(RIGHT, 0);    
+    MOTOR_SetSpeed(RIGHT, 0); 
+    speed[0] = speed1;
+    speed[1] = speed2;  
 }
 
 /*
@@ -46,7 +64,7 @@ direction : 0 = Gauche // 1 = Droit
 */
 void TurnNoMoving(float speed, float huitTour, bool direction)
 {
-    int nbrTour = (UnHuit * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
+    int pulseDistance = (UnHuit * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
     ENCODER_ReadReset(LEFT);
     ENCODER_ReadReset(RIGHT);
     int lastLeft = 0;
@@ -56,7 +74,7 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
     float pSpeed [2] = {1,1};//pSpeed[0]=Speed Gauche //pSpeed[1]=Speed Droit
     if(direction)//Turn Right
     {
-        while ((ENCODER_Read(LEFT) < nbrTour) && (ENCODER_Read(RIGHT) > (0 - nbrTour)))
+        while ((ENCODER_Read(LEFT) < pulseDistance) && (ENCODER_Read(RIGHT) > (0 - pulseDistance)))
         {
             delay(20);
             lastLeft = newLeft;
@@ -75,7 +93,7 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
     }
     else
     {
-        while ((ENCODER_Read(LEFT) > (0 - nbrTour)) && (ENCODER_Read(RIGHT) < nbrTour))
+        while ((ENCODER_Read(LEFT) > (0 - pulseDistance)) && (ENCODER_Read(RIGHT) < pulseDistance))
         {
             delay(20);
             lastLeft = newLeft;
