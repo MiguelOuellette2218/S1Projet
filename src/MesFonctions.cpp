@@ -25,6 +25,13 @@ void avancerCm(float distance)
         ENCODER_Reset(LEFT);
         ENCODER_Reset(RIGHT);
 
+        vitesse_cible = ralentir(vitesse_cible, nbr_pulse, pulse_distance, 20);
+
+        // Debug
+        Serial.print(pwmL);
+        Serial.print("   -   ");
+        Serial.println(pwmR);
+
         // Définition de la vitesse
         MOTOR_SetSpeed(LEFT, pwmL);
         MOTOR_SetSpeed(RIGHT, pwmR);
@@ -89,4 +96,23 @@ int32_t setSetpoint(float cm, float cycle, float speed)
 
     int32_t pulses = nbrPulses(cm);
     return (pulses * (cycle / 1000)) / (1 / speed);
+}
+
+/*
+* Fonction qui ralenti le robot en fonction de ça vitesse
+* int32_t vitesse : vitesse en pulse par cycle (DELAY)
+* int32_t distance_presente : distance parcourus
+* int32_t distance_finale : distance à atteindre
+* int pourcentage : pourcentage de réduction de la vitesse
+*/
+int32_t ralentir(int32_t vitesse, int32_t distance_presente, int32_t distance_finale, int pourcentage)
+{
+    if(distance_presente >= distance_finale - 2*PULSEPARTOUR)
+    {
+        Serial.println("Ralenti!!!");
+        return vitesse - (vitesse * (pourcentage / 100));
+    } else
+    {
+        return vitesse;
+    }
 }
