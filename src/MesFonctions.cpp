@@ -15,7 +15,7 @@ void avancerCm(float distance)
 {
     int32_t pulse_distance = nbrPulses(distance);
     int32_t nbr_pulse = 0;
-    int32_t vitesse_cible = setSetpoint(distance, DELAY, 0.5);
+    int32_t vitesse_cible = setSetpoint(distance, DELAY, 0.2);
 
     float pwmL = 0;
     float pwmR = 0;
@@ -53,6 +53,11 @@ float corrige_vitesse(int motor, int32_t vitesse_cible)
     static float erreurAcc[2] = {0};
 
     float erreur =  vitesse_cible - ENCODER_Read(motor);
+
+    if(erreur == 0){
+        erreurAcc[motor] = 0;
+    }
+
     erreurAcc[motor] += erreur;
 
     float correction = (erreur * KP) + (erreurAcc[motor] * KI);
