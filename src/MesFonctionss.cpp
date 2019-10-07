@@ -46,7 +46,7 @@ void CmMove(float cm, float* speed)
             Serial.println(0 - (speed2 * pSpeed[1]));
             Serial.println(" ");
         //ADJUST AND SET SPEED
-        AdjustSpeed(newLeft - lastLeft,newRight - lastRight,pSpeed, speed2);
+        AdjustSpeed(newLeft - lastLeft, 0, newRight - lastRight, 0, pSpeed, speed2);
         MOTOR_SetSpeed(LEFT, speed1 * pSpeed[0] - ralentissement);
         MOTOR_SetSpeed(RIGHT, speed2 * pSpeed[1] - ralentissement);
     }
@@ -86,7 +86,7 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
             Serial.println("Right");
             Serial.println(0 - (newRight - lastRight));
             Serial.println(" ");
-            AdjustSpeed(newLeft - lastLeft, 0 - (newRight - lastRight),pSpeed, speed);
+            AdjustSpeed(newLeft - lastLeft, 0,  0 - (newRight - lastRight), 0, pSpeed, speed);
             MOTOR_SetSpeed(LEFT, speed * pSpeed[0]); //- pSpeed[0]);
             MOTOR_SetSpeed(RIGHT, (0 - speed) * pSpeed[1]);
         }
@@ -100,7 +100,7 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
             lastRight = newRight;
             newLeft = ENCODER_Read(LEFT);
             newRight = ENCODER_Read(RIGHT);          
-            AdjustSpeed(0 - (newLeft - lastLeft),newRight - lastRight,pSpeed,speed);
+            AdjustSpeed(0 - (newLeft - lastLeft), 0 , newRight - lastRight, 0 , pSpeed,speed);
             MOTOR_SetSpeed(LEFT, (0 - speed) * pSpeed[0]); //- pSpeed[0]);
             MOTOR_SetSpeed(RIGHT, speed * pSpeed[1]);
         }  
@@ -110,7 +110,10 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
      MOTOR_SetSpeed(LEFT, 0); 
 }
 
-void AdjustSpeed(int gauche, int droit, float* pSpeed, float speed)
+
+
+
+void AdjustSpeed(int gauche,int gaucheDistance, int droit, int droitDistance, float* pSpeed, float speed)
 {
     if(gauche > droit)//Grosse ajustement          Gauche trop rapide
     {   
