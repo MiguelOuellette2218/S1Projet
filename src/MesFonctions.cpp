@@ -3,6 +3,7 @@
 
 #define CIRCONFERENCE 24.25 //23,94 selon le wiki de LibRobus
 #define PULSEPARTOUR 3200 // Nombre de pulse des encodeur par tour de roue
+#define DISTANCEROUE 18.8
 #define DELAY 20 // en ms
 #define KP 0.0003
 #define KI 0.000002
@@ -15,7 +16,7 @@ void avancerCm(float distance)
 {
     int32_t pulse_distance = nbrPulses(distance);
     int32_t nbr_pulse = 0;
-    int32_t vitesse_cible = setSetpoint(distance, DELAY, 0.2);
+    int32_t vitesse_cible = setSetpoint(distance, DELAY, 0.3);
 
     float pwmL = 0;
     float pwmR = 0;
@@ -28,9 +29,9 @@ void avancerCm(float distance)
         vitesse_cible = ralentir(vitesse_cible, nbr_pulse, pulse_distance, 20);
 
         // Debug
-        Serial.print(pwmL);
-        Serial.print("   -   ");
-        Serial.println(pwmR);
+        //Serial.print(pwmL);
+        //Serial.print("   -   ");
+        //Serial.println(pwmR);
 
         // Définition de la vitesse
         MOTOR_SetSpeed(LEFT, pwmL);
@@ -48,6 +49,67 @@ void avancerCm(float distance)
     // Arrêt des moteurs
     MOTOR_SetSpeed(LEFT, 0);
     MOTOR_SetSpeed(RIGHT, 0);
+}
+
+/*
+* Fonction qui fait avancer un motor seul
+* int motor : id du moteur
+* int32_t distance : distance en cm
+*/
+void avancerMoteurCm(int motor, float distance)
+{
+    int32_t pulse_distance = nbrPulses(distance);
+    int32_t nbr_pulses = 0;
+    int32_t vitesse_cible = setSetpoint(distance, DELAY, 0.3);
+    
+    float pwm = 0;
+
+    while(nbr_pulses < pulse_distance)
+    {
+        ENCODER_Reset(motor);
+
+        MOTOR_SetSpeed(motor, pwm);
+
+        delay(DELAY);
+
+        pwm += corrige_vitesse(motor, vitesse_cible);
+
+        nbr_pulses += ENCODER_Read(motor);
+    }
+
+    MOTOR_SetSpeed(motor, 0);
+}
+
+/*
+* Fonction qui fait tourner le robot sur une roue
+* int motor : sens dans lequel on veut tourner
+* int angle : angle en degrés vers lequel s'orienter
+*/
+void tournerSurUneRoue(int motor, int angle)
+{
+    // Inversion des moteurs
+    if(motor == LEFT)
+    {
+        motor = RIGHT;
+    } else
+    {
+        motor = LEFT;
+    }
+    
+    float distance = arc(DISTANCEROUE, angle);
+    
+    avancerMoteurCm(motor, distance);
+}
+
+/*
+* Fonction qui calcul l'arc d'un cercle en fonction d'un angle et d'un rayon donnée
+* float rayon : rayon en cm
+* float angle : angle en degrés
+* return : distance en cm
+*/
+float arc(float rayon, float angle)
+{
+    return (2 * PI * rayon * angle) / 360;
 }
 
 /*
