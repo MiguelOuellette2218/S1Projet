@@ -116,3 +116,4 @@ int32_t ralentir(int32_t vitesse, int32_t distance_presente, int32_t distance_fi
         return vitesse;
     }
 }
+

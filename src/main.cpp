@@ -29,7 +29,8 @@ void loop() {
   {
 
   }
-  delay(200);
+  avancerCm(120);
+  TurnNoMoving(0.25,4,0);
 }
 
 
