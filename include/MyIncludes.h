@@ -7,6 +7,6 @@
 #define UnHuit 7.5
 // Valeur des moteurs
 void CmMove(float , float* );
-void AdjustSpeed(int , int, int, int , float*, float);
+void AdjustSpeed(int , int , float* , float );
 void TurnNoMoving(float , float, bool);
 void test(void);

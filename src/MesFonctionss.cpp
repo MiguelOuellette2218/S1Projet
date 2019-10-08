@@ -12,49 +12,46 @@ void CmMove(float cm, float* speed)
     int newLeft = 0;
     int newRight = 0;
     float pSpeed [2] = {1,1};//pSpeed[0]=Speed Gauche //pSpeed[1]=Speed Droit
-    float speed1 = speed[0] / 25;
-    float speed2 = speed[1] / 25;
+    float speedG = speed[0] / 25;//Partir lentement
+    float speedD = speed[1] / 25;
     float ralentissement = 0;
 
     while ((ENCODER_Read(LEFT) < pulseDistance) && (ENCODER_Read(RIGHT) < pulseDistance))
     {
-        delay(10 / speed2);
+        delay(10 / speedD);
+        
         if(ENCODER_Read(LEFT) < pulseDistance - PULSEPARTOUR)
         {
-            if(speed1 < speed[0])
+            if(speedG < speed[0])
             {
-                speed1 += speed[0] / 25;        //Accélération
-                speed2 += speed[1] / 25;
+                speedG += speed[0] / 25;        //Accélération
+                speedD += speed[1] / 25;
             }
         }
         else
         {                                       //speed1 -= speed1/25;
-            ralentissement += (0.005 /(ralentissement + speed1));    //Ralentissement
-            ralentissement += (0.005 /(ralentissement + speed2));
-            if(ralentissement > speed1)ralentissement = speed1;
-            else if(ralentissement > speed2)ralentissement = speed2;
+            ralentissement += (0.005 /(ralentissement + speedG));    //Ralentissement
+            ralentissement += (0.005 /(ralentissement + speedD));
+            if(ralentissement > speedG)ralentissement = speedG;
+            else if(ralentissement > speedD)ralentissement = speedD;
         } 
         
         lastLeft = newLeft;     //Enregistre les anciennes valeurs avant de relire
         lastRight = newRight;   
         newLeft = ENCODER_Read(LEFT);
         newRight = ENCODER_Read(RIGHT);
-        //PRINT IN TERMINAL
-            Serial.println("Left");
-            Serial.println(speed2 * pSpeed[0]);
-            Serial.println("Right");
-            Serial.println(0 - (speed2 * pSpeed[1]));
-            Serial.println(" ");
         //ADJUST AND SET SPEED
-        AdjustSpeed(newLeft - lastLeft, 0, newRight - lastRight, 0, pSpeed, speed2);
-        MOTOR_SetSpeed(LEFT, speed1 * pSpeed[0] - ralentissement);
-        MOTOR_SetSpeed(RIGHT, speed2 * pSpeed[1] - ralentissement);
+        int erreurInstant = (newLeft - lastLeft) - (newRight - lastRight);
+        int erreurOLong = newLeft -  newRight;
+        AdjustSpeed(erreurInstant,erreurOLong, pSpeed, speedD);
+        MOTOR_SetSpeed(LEFT, speedG * pSpeed[0] - ralentissement);
+        MOTOR_SetSpeed(RIGHT, speedD * pSpeed[1] - ralentissement);
     }
     //TURN TO 0 MOTORS
-    MOTOR_SetSpeed(LEFT, 0);
-    MOTOR_SetSpeed(RIGHT, 0); 
-    speed[0] = speed1;
-    speed[1] = speed2;  
+   // MOTOR_SetSpeed(LEFT, 0);
+   // MOTOR_SetSpeed(RIGHT, 0); 
+    speed[0] = speedG;
+    speed[1] = speedD;  
 }
 
 /*
@@ -81,12 +78,11 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
             lastRight = newRight;
             newLeft = ENCODER_Read(LEFT);
             newRight = ENCODER_Read(RIGHT);
-            Serial.println("Left");
-            Serial.println(newLeft - lastLeft);
-            Serial.println("Right");
-            Serial.println(0 - (newRight - lastRight));
-            Serial.println(" ");
-            AdjustSpeed(newLeft - lastLeft, 0,  0 - (newRight - lastRight), 0, pSpeed, speed);
+            Serial.println(newLeft - lastLeft);          
+            Serial.println(0 - (newRight - lastRight)); 
+            int erreurInstant = (newLeft - lastLeft) + (newRight - lastRight);
+            int erreurOLong = newLeft +  newRight;        
+            AdjustSpeed(erreurInstant, erreurOLong, pSpeed, speed);
             MOTOR_SetSpeed(LEFT, speed * pSpeed[0]); //- pSpeed[0]);
             MOTOR_SetSpeed(RIGHT, (0 - speed) * pSpeed[1]);
         }
@@ -100,7 +96,9 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
             lastRight = newRight;
             newLeft = ENCODER_Read(LEFT);
             newRight = ENCODER_Read(RIGHT);          
-            AdjustSpeed(0 - (newLeft - lastLeft), 0 , newRight - lastRight, 0 , pSpeed,speed);
+            int erreurInstant = -(newLeft - lastLeft) - (newRight - lastRight);
+            int erreurOLong = - newLeft -  newRight;    
+            AdjustSpeed(erreurInstant,erreurOLong, pSpeed,speed);
             MOTOR_SetSpeed(LEFT, (0 - speed) * pSpeed[0]); //- pSpeed[0]);
             MOTOR_SetSpeed(RIGHT, speed * pSpeed[1]);
         }  
@@ -109,28 +107,52 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
      MOTOR_SetSpeed(RIGHT, 0);
      MOTOR_SetSpeed(LEFT, 0); 
 }
+/*
+
+*/
 
 
 
-
-void AdjustSpeed(int gauche,int gaucheDistance, int droit, int droitDistance, float* pSpeed, float speed)
+void AdjustSpeed(int erreurInstant, int erreurOLong, float* pSpeed, float speed)
 {
-    if(gauche > droit)//Grosse ajustement          Gauche trop rapide
-    {   
-        int erreur = gauche - droit;
-        if(pSpeed[1] < 1)pSpeed[1] += (0.0001 * erreur);
-        else pSpeed[0] -= (0.0001 * erreur);
-        Serial.println("Erreur G > D");
-        Serial.println(erreur);
-    }
-    else if(droit > gauche)//Grosse ajustement    Droit trop rapide
+    int erreurCorrigeG = 1;
+    int erreurCorrigeD = 1;
+    if(erreurOLong < 0)//Gauche < Droit
     {
-        int erreur = droit - gauche;
-        if(pSpeed[1] < 1)pSpeed[1] += (0.0001 * erreur);
-        else pSpeed[1] -= (0.0001 * erreur);
-        Serial.println("Erreur D > G");
-        Serial.println(erreur);
+        if(pSpeed[1] > 1) erreurCorrigeD = (1 + 0.0005 * erreurOLong * speed);
+        else erreurCorrigeG = (1 + -0.0005 * erreurOLong * speed);
     }
+    else if(erreurOLong > 0)//Gauche > Droit
+    {
+        if(pSpeed[0] > 1) erreurCorrigeG = (1 - 0.0005 * erreurOLong * speed);
+        else erreurCorrigeD = (1 + 0.0005 * erreurOLong * speed);
+    }
+    /*
+    if(erreurOLong < 0)//Gauche < Droit
+    {
+        if(pSpeed[1] > 1) pSpeed[1] -= (-0.0001 * erreurOLong * speed);
+        else pSpeed[0] += (-0.0001 * erreurOLong * speed);
+    }
+    else if(erreurOLong > 0)//Gauche > Droit
+    {
+        if(pSpeed[0] > 1) pSpeed[0] -= (0.0001 * erreurOLong * speed);
+        else pSpeed[1] += (0.0001 * erreurOLong * speed);
+    }
+    //erreurInstant < 0         0 ou -2 ou -5 a tester  BEST: Vitesse
+   if(erreurInstant < 0)//Gauche < Droit
+    {   
+ /* Si Droit est plus vite que la vitesse désiré, Ralentir le droit
+    Sinon Accélere le gauche
+        if(pSpeed[1] > 1)erreurCorrigeD = (erreurCorrigeD + (1 - 0.0001 * erreurInstant))/2;
+        else erreurCorrigeG = (erreurCorrigeG + ( 1 + 0.0001 * erreurInstant))/2;
+    }
+    else if(erreurInstant > 0)//Droit trop rapide
+    {
+        if(pSpeed[0] > 1)erreurCorrigeG = (erreurCorrigeG + (1 - 0.0001 * erreurInstant))/2;
+        else erreurCorrigeD = (erreurCorrigeD + (1 + 0.0001 * erreurInstant))/2;
+    }*/
+    pSpeed[0] = erreurCorrigeG;
+    pSpeed[1] = erreurCorrigeD;
 }
 
 
