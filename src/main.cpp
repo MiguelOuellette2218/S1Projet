@@ -12,28 +12,42 @@ void setup() {
 void loop() 
 {
   float speed[2] = {0.7,0.7};
-  /*CmMove(50, speed);
-  TurnNoMoving(0.15,1,0);
-  */
-  //Seq 1
-  CmMove(120, speed);
-  TurnNoMoving(0.3,2,0);
-  //Seq 2
+
+  //Seq1
+  CmMove(122.5, speed);
+  delay(200);
+  TurnNoMoving(0.3,2,GAUCHE);
+  delay(200);
+  
+  //Seq2
   CmMove(90, speed);
-  TurnNoMoving(0.3,2,1);
-  //Seq 3
-  CmMove(95, speed);
-  TurnNoMoving(0.3,1,1);
-  //Seq 5
-  CmMove(175, speed);
-  TurnNoMoving(0.3,2,0);
-  //Seq 6
-  CmMove(71, speed);
-  TurnNoMoving(0.3,1,1);
-  //Seq 7
+  delay(200);
+  TurnNoMoving(0.3,2,DROITE);
+  delay(200);
+
+  //Seq3
+  CmMove(74.5, speed);
+  delay(200);
+  TurnNoMoving(0.3,1,DROITE);
+  delay(200);
+
+  //Seq4
+  CmMove(194.5, speed);
+  delay(200);
+  TurnNoMoving(0.3,2,GAUCHE);
+  delay(200);
+
+  //Seq5
+  CmMove(66.5, speed);
+  delay(200);
+  TurnNoMoving(0.3,1,DROITE);
+  delay(200);
+
+  //Seq6
   CmMove(100, speed);
-  TurnNoMoving(1,24,1);
-  while(1);
+  delay(200);
+  TurnNoMoving(0.3,4,DROITE);
+  delay(200);
 }
 
 

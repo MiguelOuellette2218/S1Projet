@@ -61,7 +61,7 @@ direction : 0 = Gauche // 1 = Droit
 */
 void TurnNoMoving(float speed, float huitTour, bool direction)
 {
-    int pulseDistance = (UnHuit * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
+    int pulseDistance = 0;//(UnHuit * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
     ENCODER_ReadReset(LEFT);
     ENCODER_ReadReset(RIGHT);
     int lastLeft = 0;
@@ -69,6 +69,34 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
     int newLeft = 0;
     int newRight = 0;
     float pSpeed [2] = {1,1};//pSpeed[0]=Speed Gauche //pSpeed[1]=Speed Droit
+    int test = huitTour;
+    switch (test)
+    {
+        case 1: 
+            switch(direction)
+            {
+                case 0:
+                pulseDistance = (7.5 * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
+                break;
+                case 1:
+                pulseDistance = (7 * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
+                break;
+            }
+            
+        break;
+        case 2:
+            switch(direction)
+            {
+                case 0:
+                pulseDistance = (9 * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
+                break;
+                case 1:
+                pulseDistance = (8.1 * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
+                break;
+            }
+        break;
+        pulseDistance = (UnHuit * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
+    }
     if(direction)//Turn Right
     {
         while ((ENCODER_Read(LEFT) < pulseDistance) && (ENCODER_Read(RIGHT) > (0 - pulseDistance)))

@@ -4,7 +4,9 @@
 // Nombre de pulse des encodeur par tour de roue
 #define PULSEPARTOUR 3200
 //#define UnHuit 116.87
-#define UnHuit 7.5
+#define UnHuit 7.3
+#define GAUCHE 0
+#define DROITE 1
 // Valeur des moteurs
 void CmMove(float , float* );
 void AdjustSpeed(int , int , float* , float );
