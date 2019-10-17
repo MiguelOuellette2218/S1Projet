@@ -34,6 +34,9 @@ void CmMove(float cm, float* speed)
             ralentissement += (0.005 /(ralentissement + speedD));
             if(ralentissement > speedG)ralentissement = speedG;
             else if(ralentissement > speedD)ralentissement = speedD;
+
+       // if(ralentissement <speedG - 0.30 )ralentissement += 0.5 *(speedD + speedG);   
+
         } 
         
         lastLeft = newLeft;     //Enregistre les anciennes valeurs avant de relire
@@ -61,7 +64,7 @@ direction : 0 = Gauche // 1 = Droit
 */
 void TurnNoMoving(float speed, float huitTour, bool direction)
 {
-    int pulseDistance = 0;//(UnHuit * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
+    float pulseDistance = 0;//(UnHuit * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
     ENCODER_ReadReset(LEFT);
     ENCODER_ReadReset(RIGHT);
     int lastLeft = 0;
@@ -76,10 +79,10 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
             switch(direction)
             {
                 case 0:
-                pulseDistance = (7.5 * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
+                pulseDistance = (7.05 * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
                 break;
                 case 1:
-                pulseDistance = (7 * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
+                pulseDistance = (7.2 * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
                 break;
             }
             
