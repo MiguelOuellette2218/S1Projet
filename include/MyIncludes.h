@@ -3,6 +3,8 @@
 
 #include <math.h>
 
+#include "vector.h"
+
 int32_t nbrPulses(float cm);
 int32_t setSetpoint(float cm, float cycle, float time);
 
@@ -22,3 +24,18 @@ float arc(float rayon, float angle);
 
 void AdjustSpeed(int gauche,int gaucheDistance, int droit, int droitDistance, float* pSpeed, float speed);
 void TurnNoMoving(float speed, float huitTour, bool direction);
+
+/**
+ * 
+ * CHEATCODE
+ * 
+**/
+
+int bumper();
+void cheatinit(vector* gauche, vector *droite);
+void cheatCodeProc(vector* gauche, vector *droite);
+
+void push(vector* p, ul x);
+
+//cheatcode 2
+void cheatProc(int32_t* gauche, int32_t* droite);
