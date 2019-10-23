@@ -39,3 +39,9 @@ void push(vector* p, ul x);
 
 //cheatcode 2
 void cheatProc(int32_t* gauche, int32_t* droite);
+//Mouvements
+#define PULSEPARTOUR 3200
+#define CIRCONFERENCE 23.94
+#define K 0.0001
+void MoveFoward(float cm, float* speed);
+void PID(int erreurVitesse, int erreurPosition, float* pSpeed, float speed);
