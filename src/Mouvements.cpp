@@ -1,4 +1,7 @@
 #include"MyIncludes.h"
+#define ROBOTA 0.035
+#define ROBOTB 0
+#define USEROBOT ROBOTA
 
 void MoveFoward(float cm, float* speed)
 {
@@ -44,7 +47,7 @@ void MoveFoward(float cm, float* speed)
             int erreurPosition = newLeft -  newRight;
             PID(erreurVitesse,erreurPosition, pSpeed, speedD);
             MOTOR_SetSpeed(LEFT, speedG + pSpeed[0] - ralentissement);
-            MOTOR_SetSpeed(RIGHT, speedD + pSpeed[1] - ralentissement + 0.035);
+            MOTOR_SetSpeed(RIGHT, speedD + pSpeed[1] - ralentissement + USEROBOT);
             time = millis();
             oldTime = time;
         }
