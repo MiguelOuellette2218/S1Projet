@@ -45,3 +45,9 @@ void cheatProc(int32_t* gauche, int32_t* droite);
 #define K 0.0001
 void MoveFoward(float cm, float* speed);
 void PID(int erreurVitesse, int erreurPosition, float* pSpeed, float speed);
+
+/*
+Suiveur de ligne 
+*/
+int IdentifierPossibilite(float);
+void DecisionDirection(int);

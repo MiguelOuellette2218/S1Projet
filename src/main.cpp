@@ -2,7 +2,7 @@
 
 #define CIRCONFERENCE 24.25
 
-int mainbumper();
+//sint mainbumper();
 
 vector gauche;
 vector droite;
@@ -15,8 +15,8 @@ void setup() {
 
   BoardInit();
 
-  Serial.begin(9600);
-  
+/*
+  Serial.begin(9600);  
   cheatinit(&gauche, &droite);
 
   for(sl i=0; i<10; i++){
@@ -34,9 +34,18 @@ void setup() {
   }
 
   delay(1500);
+  */
 }
 
 void loop() {
+
+float yolo =analogRead(A0)*(5.0 / 1023.0); 
+Serial.println(yolo);
+
+//print
+
+//float speed [2] = {0.5,0.5};
+  //MoveFoward(200,speed);
   //Serial.println("bla");
   //cheatProc(gauche , droite);
   //delay(200);
