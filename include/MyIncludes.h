@@ -3,7 +3,6 @@
 
 #include <math.h>
 
-
 /*
 *   Fonction Gab
 */
@@ -31,6 +30,9 @@ float arc(float rayon, float angle);
 /*
 *   Fonctions Simon
 */
+void MoveFoward(float cm, float* speed, bool (*callback)(void));
+void PID(int erreurVitesse, int erreurPosition, float* pSpeed, float speed);
+
 void AdjustSpeed(int gauche,int gaucheDistance, int droit, int droitDistance, float* pSpeed, float speed);
 void TurnNoMoving(float speed, float huitTour, bool direction);
 /*

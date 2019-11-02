@@ -25,25 +25,27 @@ Possibilité possible du captage du voltage du circuit , le premier chiffre éta
 	for(unsigned int i = 0; i < sizeof(possibilite); i++)
 	{
   
-	//Si le voltage entré est plus ou moin grand à chacune des possibilite (pour laisser de la place à un jeu parce que le analogue n'est pas très précis)
-	if(volt > possibilite[i]-difference && volt < possibilite[i]+difference )
-	{
-	return i;
-	}
+	    // Si le voltage entré est plus ou moin grand à chacune des possibilite 
+        // (pour laisser de la place à un jeu parce que le analogue n'est pas très précis)
+	    if(volt > possibilite[i]-difference && volt < possibilite[i]+difference )
+	    {
+	        return i;
+	    }
     }
 
  return 10;
 }
 
 
-void DecisionDirection(int possibilite)
+bool DecisionDirection()
 {
-    //Initialisation du pointeur récursif
-    void (*p_DecisionDirection)(int);
-    p_DecisionDirection = DecisionDirection;
+    bool breaker = false;
 
+    //Initialisation du pointeur récursif
+    bool (*p_DecisionDirection)(void);
+    p_DecisionDirection = DecisionDirection;
     
-    //int possibilite = IdentifierPossibilite(analogRead(A0));
+    int possibilite = IdentifierPossibilite(analogRead(A0));
 
     switch(possibilite)
     {

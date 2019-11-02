@@ -3,7 +3,13 @@
 #define ROBOTB 0
 #define USEROBOT ROBOTA
 
-void MoveFoward(float cm, float* speed)
+/*
+* Fonction pour avancer
+* float cm: Distance à parcourir
+* float* speed: vitesse voulue
+* bool (*callback)(void): fonction d'intéruption de la méthode
+*/
+void MoveFoward(float cm, float* speed, bool (*callback)(void))
 {
     delay(200);
     int32_t pulseDistance = (cm * PULSEPARTOUR) / CIRCONFERENCE;
@@ -25,7 +31,12 @@ void MoveFoward(float cm, float* speed)
     {
         time = millis();   
         if(time - oldTime > 49)
-        {          
+        {   
+            // Fonction d'interruption
+            if(callback) // Si l'adresse de calback est non NULL
+                if(callback())
+                    break;
+
             if(ENCODER_Read(LEFT) < pulseDistance - PULSEPARTOUR)
             {                                       //Accélération
                 if(speedG + 0.05 < speed[0])speedG += 0.05;

@@ -13,6 +13,7 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
     int newLeft = 0;
     int newRight = 0;
     float pSpeed [2] = {1,1};//pSpeed[0]=Speed Gauche //pSpeed[1]=Speed Droit
+
     if(direction)//Turn Right
     {
         while ((ENCODER_Read(LEFT) < pulseDistance) && (ENCODER_Read(RIGHT) > (0 - pulseDistance)))
