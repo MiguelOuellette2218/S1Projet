@@ -3,8 +3,10 @@
 
 #include <math.h>
 
-#include "vector.h"
 
+/*
+*   Fonction Gab
+*/
 int32_t nbrPulses(float cm);
 int32_t setSetpoint(float cm, float cycle, float time);
 
@@ -22,29 +24,12 @@ int32_t ralentir(int32_t vitesse, int32_t distance_presente, int32_t distance_fi
 
 float arc(float rayon, float angle);
 
+/*
+*   END Fonction Gab
+*/
+
 void AdjustSpeed(int gauche,int gaucheDistance, int droit, int droitDistance, float* pSpeed, float speed);
 void TurnNoMoving(float speed, float huitTour, bool direction);
-
-/**
- * 
- * CHEATCODE
- * 
-**/
-
-int bumper();
-void cheatinit(vector* gauche, vector *droite);
-void cheatCodeProc(vector* gauche, vector *droite);
-
-void push(vector* p, ul x);
-
-//cheatcode 2
-void cheatProc(int32_t* gauche, int32_t* droite);
-//Mouvements
-#define PULSEPARTOUR 3200
-#define CIRCONFERENCE 23.94
-#define K 0.0001
-void MoveFoward(float cm, float* speed);
-void PID(int erreurVitesse, int erreurPosition, float* pSpeed, float speed);
 
 /*
 Suiveur de ligne 
