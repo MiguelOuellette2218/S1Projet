@@ -1,3 +1,5 @@
+#include "MyIncludes.h"
+
 int IdentifierPossibilite(float volt)
 {
 /*
@@ -36,10 +38,14 @@ Possibilité possible du captage du voltage du circuit , le premier chiffre éta
 
 void DecisionDirection(int possibilite)
 {
-    
-  //  int possibilite = IdentifierPossibilite(analogRead(A0));
+    //Initialisation du pointeur récursif
+    void (*p_DecisionDirection)(int);
+    p_DecisionDirection = DecisionDirection;
 
-        switch(possibilite)
+    
+    //int possibilite = IdentifierPossibilite(analogRead(A0));
+
+    switch(possibilite)
     {
         case 0:
            //Avancer tant qu'on ne touche pas a aucune ligne (en mode H E L P)

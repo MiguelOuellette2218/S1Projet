@@ -28,11 +28,18 @@ float arc(float rayon, float angle);
 *   END Fonction Gab
 */
 
+/*
+*   Fonctions Simon
+*/
 void AdjustSpeed(int gauche,int gaucheDistance, int droit, int droitDistance, float* pSpeed, float speed);
 void TurnNoMoving(float speed, float huitTour, bool direction);
+/*
+*   END Fonctions Simon
+*/
+
 
 /*
-Suiveur de ligne 
+*   Suiveur de ligne 
 */
 int IdentifierPossibilite(float);
 void DecisionDirection(int);

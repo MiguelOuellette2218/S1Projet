@@ -7,14 +7,12 @@ void setup() {
 
   BoardInit();
   Serial.begin(9600);  
-
-  delay(1500);
 }
 
 void loop() {
 
-float yolo =analogRead(A0)*(5.0 / 1023.0); 
-Serial.println(yolo);
+//float yolo =analogRead(A0)*(5.0 / 1023.0); 
+//Serial.println(yolo);
 
 }
 
