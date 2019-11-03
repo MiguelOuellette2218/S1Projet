@@ -35,6 +35,10 @@ void PID(int erreurVitesse, int erreurPosition, float* pSpeed, float speed);
 
 void AdjustSpeed(int gauche,int gaucheDistance, int droit, int droitDistance, float* pSpeed, float speed);
 void TurnNoMoving(float speed, float huitTour, bool direction);
+#define K 0.0001
+#define CIRCONFERENCE 23.94
+#define PULSEPARTOUR 3200
+#define UnHuit 7.5
 /*
 *   END Fonctions Simon
 */
