@@ -49,3 +49,4 @@ void TurnNoMoving(float speed, float huitTour, bool direction);
 */
 int IdentifierPossibilite(float);
 void DecisionDirection(int);
+void ScannerPourBalle();
