@@ -50,3 +50,15 @@ void TurnNoMoving(float speed, float huitTour, bool direction);
 int IdentifierPossibilite(float);
 void DecisionDirection(int);
 void ScannerPourBalle();
+/*
+*   END Fonctions Mig
+*/
+
+
+/*
+*   Pinces
+*/
+
+void setupPinces();
+void fermerPinces();
+void ouvrirPinces();

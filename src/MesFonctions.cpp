@@ -291,3 +291,19 @@ void ScannerPourBalle()
     MOTOR_SetSpeed(LEFT, 0);
     MOTOR_SetSpeed(RIGHT, 0);
 }
+
+void fermerPinces()
+{
+    SERVO_SetAngle(0, 90);
+}
+
+void ouvrirPinces()
+{
+    SERVO_SetAngle(0, 135);
+}
+void setupPinces()
+{
+    SERVO_Enable(0);
+    delay(200);
+    ouvrirPinces();
+}
