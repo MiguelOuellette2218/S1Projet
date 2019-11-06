@@ -9,8 +9,6 @@
 #define KP 0.00065  // 20A
 #define KI 0.000009 // 20A
 
-enum COULEUR {ROUGE, VERT, BLEU , JAUNE};
-
 /*
 * Fonction qui permet de faire avancer le robot en fonction d'une distance
 * float distance : distance en cm
@@ -337,19 +335,27 @@ void FaireParcoursA(COULEUR couleur)
     {
     case ROUGE:
         //Tourne a gauche pour être en angle de 45 par rapport au but vert
-        avancerCm(100 , 2, NULL);
-        tournerSurLuiMeme(RIGHT, 90 ,1);
+        tournerSurLuiMeme(LEFT, 90 ,1);
+        avancerCm(200, 5, p_detectionLigne);
+        tournerSurLuiMeme(RIGHT, 90, 1);
+        avancerCm(200, 5, p_detectionLigne);
+        tournerSurLuiMeme(LEFT, 45, 1);
         break;
     
     case VERT:
         //Tourne a gauche pour être en angle de 45 par rapport au but rouge
-        avancerCm(100 , 2, NULL);
-        tournerSurLuiMeme(LEFT, 90 ,1);
+        tournerSurLuiMeme(RIGHT, 90 ,1);
+        avancerCm(200, 5, p_detectionLigne);
+        tournerSurLuiMeme(LEFT, 90, 1);
+        avancerCm(200, 5, p_detectionLigne);
+        tournerSurLuiMeme(RIGHT, 45, 1);
         break;
     
     case BLEU:
         //Tourne a droit pour être en angle de 45 par rapport au but bleu
         tournerSurLuiMeme(RIGHT, 90 ,1);
+        avancerCm(200, 5, p_detectionLigne);
+        tournerSurLuiMeme(RIGHT, 45, 1);
         break;
     
     case JAUNE:
@@ -369,12 +375,10 @@ void FaireParcoursA(COULEUR couleur)
     fermerPinces();
 
     //Reculer pour revenir vers la ligne
-    avancerCm(-100,2, NULL);
-    tournerSurLuiMeme(RIGHT, 180,1);
-    DecisionDirection();
+    
 
     //Dropper la balle dans le centre
-    ouvrirPinces();
+    //ouvrirPinces();
 
     //DECALISSÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉ
     avancerCm(-200,5, NULL);

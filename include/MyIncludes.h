@@ -3,6 +3,8 @@
 
 #include <math.h>
 
+enum COULEUR {ROUGE, VERT, BLEU , JAUNE};
+
 /*
 *   Fonction Gab
 */
@@ -63,3 +65,8 @@ void ScannerPourBalle();
 void setupPinces();
 void fermerPinces();
 void ouvrirPinces();
+
+/*
+* Parcours
+*/
+void FaireParcoursA(COULEUR couleur);

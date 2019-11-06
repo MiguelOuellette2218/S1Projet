@@ -11,8 +11,9 @@ void setup() {
 
 void loop() {
   //Serial.println(ROBUS_ReadIR(2));
-  DecisionDirection();
-  delay(200);
+  //DecisionDirection();
+  //delay(200);
+  FaireParcoursA(JAUNE);
 }
 
 int mainbumper()
