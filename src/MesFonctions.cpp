@@ -123,12 +123,12 @@ void moteurInverse(int motor, float distance, float time)
         delay(DELAY);
 
         // Correction de la vitesse
-        if(motor == LEFT){
+        if(motor == RIGHT){
             pwmL += corrige_vitesse(LEFT, vitesse_cible);
             pwmR += corrige_vitesse(RIGHT, -vitesse_cible);
 
             nbr_pulse += ENCODER_Read(LEFT);
-        } else  if(motor == RIGHT){
+        } else  if(motor == LEFT){
             pwmL += corrige_vitesse(LEFT, -vitesse_cible);
             pwmR += corrige_vitesse(RIGHT, vitesse_cible);
 
@@ -338,23 +338,23 @@ void FaireParcoursA(COULEUR couleur)
     case ROUGE:
         //Tourne a gauche pour être en angle de 45 par rapport au but vert
         avancerCm(100 , 2, NULL);
-        tournerSurLuiMeme(RIGHT,90 ,1);
+        tournerSurLuiMeme(RIGHT, 90 ,1);
         break;
     
     case VERT:
         //Tourne a gauche pour être en angle de 45 par rapport au but rouge
         avancerCm(100 , 2, NULL);
-        tournerSurLuiMeme(-90 ,1);
+        tournerSurLuiMeme(LEFT, 90 ,1);
         break;
     
     case BLEU:
         //Tourne a droit pour être en angle de 45 par rapport au but bleu
-        tournerSurLuiMeme(90 ,1);
+        tournerSurLuiMeme(RIGHT, 90 ,1);
         break;
     
     case JAUNE:
         //Tourne a gauche pour être en angle de 45 par rapport au but jaune
-        tournerSurLuiMeme(90 ,1);
+        tournerSurLuiMeme(RIGHT, 90 ,1);
         avancerCm(200, 5, p_detectionLigne);
         break;
     
@@ -369,7 +369,7 @@ void FaireParcoursA(COULEUR couleur)
 
     //Reculer pour revenir vers la ligne
     avancerCm(-100,2, NULL);
-    tournerSurLuiMeme(180,1);
+    tournerSurLuiMeme(RIGHT, 180,1);
     DecisionDirection();
 
     //Dropper la balle dans le centre
