@@ -48,5 +48,17 @@ void TurnNoMoving(float speed, float huitTour, bool direction);
 *   Suiveur de ligne 
 */
 int IdentifierPossibilite(float);
-void DecisionDirection(int);
+bool DecisionDirection();
 void ScannerPourBalle();
+/*
+*   END Fonctions Mig
+*/
+
+
+/*
+*   Pinces
+*/
+
+void setupPinces();
+void fermerPinces();
+void ouvrirPinces();

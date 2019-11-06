@@ -14,17 +14,16 @@ Possibilité possible du captage du voltage du circuit , le premier chiffre éta
 111 4.95
 */
 
-	float possibilite[8]  = {0.03 ,1.44,0.75,2.16,2.85,4.25,3.57,4.95};
+	float possibilite[8]  = {2.16, 3.52, 4.22, 0.74, 2.79, 0.2, 1.44, 4.8};
 
-	int difference = 0.2;	
+	float difference = 0.2;
 
-	bool capteurGauche =false;
-	bool capteurMilieu = false;
-	bool capteurDroit = false;
+	//bool capteurGauche =false;
+	// capteurMilieu = false;
+	//bool capteurDroit = false;
 
-	for(unsigned int i = 0; i < sizeof(possibilite); i++)
+	for(unsigned int i = 0; i < sizeof(possibilite)/4; i++)
 	{
-  
 	    // Si le voltage entré est plus ou moin grand à chacune des possibilite 
         // (pour laisser de la place à un jeu parce que le analogue n'est pas très précis)
 	    if(volt > possibilite[i]-difference && volt < possibilite[i]+difference )
@@ -40,46 +39,79 @@ Possibilité possible du captage du voltage du circuit , le premier chiffre éta
 bool DecisionDirection()
 {
     bool breaker = false;
+    static int counter = 0;
 
     //Initialisation du pointeur récursif
     bool (*p_DecisionDirection)(void);
     p_DecisionDirection = DecisionDirection;
     
-    int possibilite = IdentifierPossibilite(analogRead(A0));
+    int possibilite = IdentifierPossibilite((float)(analogRead(A0)*(5.0 / 1023.0)));
 
     switch(possibilite)
     {
         case 0:
-           //Avancer tant qu'on ne touche pas a aucune ligne (en mode H E L P)
-          // Avancer(50);
+            // Tourner à gauche légèrement
+            MOTOR_SetSpeed(LEFT, 0.35);
+            MOTOR_SetSpeed(RIGHT, 0.5);
+            counter = 0;
             break;
        case 1:
-           //TournerÀDroite
-           // Tourner(45);
+            // Tout droit way to go
+            MOTOR_SetSpeed(LEFT, 0.5);
+            MOTOR_SetSpeed(RIGHT, 0.5);
+            counter = 0;
             break;
         case 2:
-           //NePasTourner
-          // Avancer(50);
+            // Tourner à droite légèrement
+            MOTOR_SetSpeed(LEFT, 0.5);
+            MOTOR_SetSpeed(RIGHT, 0.35);
+            counter = 0;
             break;
         case 3:
-        //Tourner(45);
-           //TournerUnPeuÀDroite
+            // Tourner à gauche aggressivement
+            MOTOR_SetSpeed(LEFT, 0.25);
+            MOTOR_SetSpeed(RIGHT, 0.5);
+            counter = 0;
             break;
         case 4:
-        
-        //Tourner(-45);
-           //TournerAGauche
+            // Tourner à droite aggressivement
+            MOTOR_SetSpeed(LEFT, 0.5);
+            MOTOR_SetSpeed(RIGHT, 0.25);
+            counter = 0;
             break;
-        case 5:
-           //TournerEnRond
+        /*case 5:
+            // HELP
+            //AX_BuzzerON(1000, 5000);
+            //Serial.println("HELP");
+            MOTOR_SetSpeed(LEFT, 0);
+            MOTOR_SetSpeed(RIGHT, 0);
             break;
         case 6:
-       // Tourner(-45);
-           //TournerUnPeuAGauche
+            // HELP
+            //AX_BuzzerON(1000, 5000);
+            //Serial.println("HELP");
+            MOTOR_SetSpeed(LEFT, 0);
+            MOTOR_SetSpeed(RIGHT, 0);
             break;
         case 7:
-           //Help
-            break;     
+            // HELP
+            //AX_BuzzerON(1000, 5000);
+            //Serial.println("HELP");
+            MOTOR_SetSpeed(LEFT, 0);
+            MOTOR_SetSpeed(RIGHT, 0);
+            break;*/
+        default:
+            //AX_BuzzerON(1000, 5000);
+            //Serial.println("HELP");
+            counter++;
+            if(counter >= 3){
+                counter = 0;
+                MOTOR_SetSpeed(LEFT, 0);
+                MOTOR_SetSpeed(RIGHT, 0);
+            }
+            break;  
     }
-
+    Serial.print("Counter : ");
+    Serial.println(counter);
+    return breaker;
 }
