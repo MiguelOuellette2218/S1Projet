@@ -63,3 +63,7 @@ void ScannerPourBalle();
 void setupPinces();
 void fermerPinces();
 void ouvrirPinces();
+
+void setupGate();
+void fermerGate();
+void ouvrirGate();
