@@ -311,6 +311,22 @@ void setupPinces()
     ouvrirPinces();
 }
 
+void fermerGate()
+{
+    SERVO_SetAngle(1, 90);
+}
+
+void ouvrirGate()
+{
+    SERVO_SetAngle(1, 0);
+}
+void setupGate()
+{
+    SERVO_Enable(1);
+    delay(200);
+    ouvrirGate();
+}
+
 
 
 void FaireParcoursA(COULEUR couleur)
