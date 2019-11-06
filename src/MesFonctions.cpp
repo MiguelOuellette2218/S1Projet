@@ -12,10 +12,12 @@
 enum COULEUR {ROUGE, VERT, BLEU , JAUNE};
 
 /*
-    * Fonction qui permet de faire avancer le robot en fonction d'une distance
-    * float distance : distance en cm
-    */
-void avancerCm(float distance, float time)
+* Fonction qui permet de faire avancer le robot en fonction d'une distance
+* float distance : distance en cm
+* float time : temps pour parcourir la distance
+* bool (*)(void) : fonction pointeur pour stopper l'action
+*/
+void avancerCm(float distance, float time, bool (*callback)())
 {
     int32_t pulse_distance = nbrPulses(distance);
     int32_t nbr_pulse = 0;
@@ -26,6 +28,10 @@ void avancerCm(float distance, float time)
 
     while (nbr_pulse < pulse_distance)
     {
+        if(callback)
+            if(callback())
+                break;
+
         ENCODER_Reset(LEFT);
         ENCODER_Reset(RIGHT);
 
@@ -85,10 +91,11 @@ void avancerMoteurCm(int motor, float distance, float time)
 
 /*
     * Fonction qui fait tourner les deux moteur à sens inverse
+    * int motor: Sens de rotation
     * float distance : distance sur lequel faire tourner le moteur
     * float time : temps pour l'opération
     */
-void moteurInverse(float distance, float time)
+void moteurInverse(int motor, float distance, float time)
 {
     int32_t pulse_distance = nbrPulses(distance);
     int32_t nbr_pulse = 0;
@@ -116,10 +123,17 @@ void moteurInverse(float distance, float time)
         delay(DELAY);
 
         // Correction de la vitesse
-        pwmL += corrige_vitesse(LEFT, vitesse_cible);
-        pwmR += corrige_vitesse(RIGHT, -vitesse_cible);
+        if(motor == RIGHT){
+            pwmL += corrige_vitesse(LEFT, vitesse_cible);
+            pwmR += corrige_vitesse(RIGHT, -vitesse_cible);
 
-        nbr_pulse += ENCODER_Read(LEFT);
+            nbr_pulse += ENCODER_Read(LEFT);
+        } else  if(motor == LEFT){
+            pwmL += corrige_vitesse(LEFT, -vitesse_cible);
+            pwmR += corrige_vitesse(RIGHT, vitesse_cible);
+
+            nbr_pulse += ENCODER_Read(RIGHT);
+        }
     }
 
     // Arrêt des moteurs
@@ -152,14 +166,15 @@ void tournerSurUneRoue(int motor, int angle, float time)
 
 /*
     * Fonctione qui fait tourner le robot sur lui même
+    * int motor: Sens de rotation
     * int angle : angle den degrés vers lequel s'orienter
     * int time : temps pour tourner
     */
-void tournerSurLuiMeme(int angle, float time)
+void tournerSurLuiMeme(int motor, int angle, float time)
 {
     float distance = arc(DISTANCEROUE / 2, angle);
 
-    moteurInverse(distance, time);
+    moteurInverse(motor, distance, time);
 }
 
 /*
@@ -331,45 +346,54 @@ void setupGate()
 
 void FaireParcoursA(COULEUR couleur)
 {
-if(couleur == ROUGE)
-{
-//Tourne a gauche pour être en angle de 45 par rapport au but vert
-avancerCm(100 , 2);
-tournerSurLuiMeme(90 ,1);
-}
-if(couleur == VERT)
-{
-    //Tourne a gauche pour être en angle de 45 par rapport au but rouge
-avancerCm(100 , 2);
-tournerSurLuiMeme(-90 ,1);
-}
-if(couleur == BLEU)
-{
-//Tourne a droit pour être en angle de 45 par rapport au but bleu
-tournerSurLuiMeme(90 ,1);
-}
-if(couleur == JAUNE)
-{
-//Tourne a gauche pour être en angle de 45 par rapport au but jaune
-tournerSurLuiMeme(90 ,1);
-}
+    bool (*p_detectionLigne)(void);
+    p_detectionLigne = detectionLigne;
 
-//Avancer jusqu'a trouver un ligne blanche
-DecisionDirection();
-ScannerPourBalle();
-fermerPinces();
+    switch (couleur)
+    {
+    case ROUGE:
+        //Tourne a gauche pour être en angle de 45 par rapport au but vert
+        avancerCm(100 , 2, NULL);
+        tournerSurLuiMeme(RIGHT, 90 ,1);
+        break;
+    
+    case VERT:
+        //Tourne a gauche pour être en angle de 45 par rapport au but rouge
+        avancerCm(100 , 2, NULL);
+        tournerSurLuiMeme(LEFT, 90 ,1);
+        break;
+    
+    case BLEU:
+        //Tourne a droit pour être en angle de 45 par rapport au but bleu
+        tournerSurLuiMeme(RIGHT, 90 ,1);
+        break;
+    
+    case JAUNE:
+        //Tourne a gauche pour être en angle de 45 par rapport au but jaune
+        tournerSurLuiMeme(RIGHT, 90 ,1);
+        avancerCm(200, 5, p_detectionLigne);
+        break;
+    
+    default:
+        break;
+    }
 
-//Reculer pour revenir vers la ligne
-avancerCm(-100,2);
-tournerSurLuiMeme(180,1);
-DecisionDirection();
+    //Avancer jusqu'a trouver un ligne blanche
+    DecisionDirection();
+    ScannerPourBalle();
+    fermerPinces();
 
-//Dropper la balle dans le centre
-ouvrirPinces();
+    //Reculer pour revenir vers la ligne
+    avancerCm(-100,2, NULL);
+    tournerSurLuiMeme(RIGHT, 180,1);
+    DecisionDirection();
 
-//DECALISSÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉ
-avancerCm(-200,5);
-delay(1000000000);
+    //Dropper la balle dans le centre
+    ouvrirPinces();
+
+    //DECALISSÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉ
+    avancerCm(-200,5, NULL);
+    delay(1000000000);
 }
 
 
