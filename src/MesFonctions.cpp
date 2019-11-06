@@ -243,10 +243,10 @@ void ScannerPourBalle()
 
     int incrementAngle = 36;
 
-    float distanceCapteur = SONAR_GetRange(0);
+    float distanceCapteur = (5000/ ROBUS_ReadIR(2)+ 5);
     float AnciennedistanceCapteur = distanceCapteur;
 
-    float difference = 70;
+    float difference = 40;
 
     float anglePetit = (float)180/incrementAngle;
 
@@ -256,23 +256,19 @@ void ScannerPourBalle()
                 MOTOR_SetSpeed(RIGHT, -0.3);
     for (size_t i = 0; i < (incrementAngle/4)*3; i++)
     {
-
         //Attribue l'ancienne valeur de distance à une variable puis change la valeur de la distance du présent
         //AnciennedistanceCapteur = distanceCapteur;
-        distanceCapteur = SONAR_GetRange(0);
-
-        
-
+        distanceCapteur = (5000/ ROBUS_ReadIR(2)+ 5);
        
             //Trouve si l'ancienne distance par rapport a la nouvelle est trop differente (donc qu'il y a probablement un object devant lui)
-            if (distanceCapteur <difference)
+            if (distanceCapteur <difference )
             {
                 //MoveFoward(distanceCapteur,50 ,false);
                  MOTOR_SetSpeed(LEFT, 0);
                 MOTOR_SetSpeed(RIGHT, 0);
                 delay(200);
-                TurnNoMoving(.5, anglePetit*2, 1);
-                delay(200);
+                //TurnNoMoving(.5, anglePetit*2, 1);
+                //delay(200);
                 avancerCm(distanceCapteur, 0.5);
                 break;
             }
