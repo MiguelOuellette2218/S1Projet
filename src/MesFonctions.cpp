@@ -354,8 +354,9 @@ void FaireParcoursA(COULEUR couleur)
     
     case JAUNE:
         //Tourne a gauche pour être en angle de 45 par rapport au but jaune
-        tournerSurLuiMeme(RIGHT, 90 ,1);
+        tournerSurLuiMeme(LEFT, 90 ,1);
         avancerCm(200, 5, p_detectionLigne);
+        tournerSurLuiMeme(LEFT, 45, 1);
         break;
     
     default:
