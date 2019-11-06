@@ -338,7 +338,7 @@ void FaireParcoursA(COULEUR couleur)
     case ROUGE:
         //Tourne a gauche pour être en angle de 45 par rapport au but vert
         avancerCm(100 , 2, NULL);
-        tournerSurLuiMeme(90 ,1);
+        tournerSurLuiMeme(RIGHT,90 ,1);
         break;
     
     case VERT:
