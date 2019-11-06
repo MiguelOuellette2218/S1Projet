@@ -91,10 +91,11 @@ void avancerMoteurCm(int motor, float distance, float time)
 
 /*
     * Fonction qui fait tourner les deux moteur à sens inverse
+    * int motor: Sens de rotation
     * float distance : distance sur lequel faire tourner le moteur
     * float time : temps pour l'opération
     */
-void moteurInverse(float distance, float time)
+void moteurInverse(int motor, float distance, float time)
 {
     int32_t pulse_distance = nbrPulses(distance);
     int32_t nbr_pulse = 0;
@@ -122,10 +123,17 @@ void moteurInverse(float distance, float time)
         delay(DELAY);
 
         // Correction de la vitesse
-        pwmL += corrige_vitesse(LEFT, vitesse_cible);
-        pwmR += corrige_vitesse(RIGHT, -vitesse_cible);
+        if(motor == LEFT){
+            pwmL += corrige_vitesse(LEFT, vitesse_cible);
+            pwmR += corrige_vitesse(RIGHT, -vitesse_cible);
 
-        nbr_pulse += ENCODER_Read(LEFT);
+            nbr_pulse += ENCODER_Read(LEFT);
+        } else  if(motor == RIGHT){
+            pwmL += corrige_vitesse(LEFT, -vitesse_cible);
+            pwmR += corrige_vitesse(RIGHT, vitesse_cible);
+
+            nbr_pulse += ENCODER_Read(RIGHT);
+        }
     }
 
     // Arrêt des moteurs
@@ -158,14 +166,15 @@ void tournerSurUneRoue(int motor, int angle, float time)
 
 /*
     * Fonctione qui fait tourner le robot sur lui même
+    * int motor: Sens de rotation
     * int angle : angle den degrés vers lequel s'orienter
     * int time : temps pour tourner
     */
-void tournerSurLuiMeme(int angle, float time)
+void tournerSurLuiMeme(int motor, int angle, float time)
 {
     float distance = arc(DISTANCEROUE / 2, angle);
 
-    moteurInverse(distance, time);
+    moteurInverse(motor, distance, time);
 }
 
 /*
