@@ -10,10 +10,9 @@ void setup() {
 }
 
 void loop() {
-
-//float yolo =analogRead(A0)*(5.0 / 1023.0); 
-//Serial.println(yolo);
-
+  //Serial.println(ROBUS_ReadIR(2));
+  DecisionDirection();
+  delay(200);
 }
 
 int mainbumper()
@@ -39,4 +38,5 @@ int mainbumper()
     return 1;
   }
   delay(200);
+  return -1;
 }
