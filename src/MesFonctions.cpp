@@ -12,10 +12,12 @@
 enum COULEUR {ROUGE, VERT, BLEU , JAUNE};
 
 /*
-    * Fonction qui permet de faire avancer le robot en fonction d'une distance
-    * float distance : distance en cm
-    */
-void avancerCm(float distance, float time)
+* Fonction qui permet de faire avancer le robot en fonction d'une distance
+* float distance : distance en cm
+* float time : temps pour parcourir la distance
+* bool (*)(void) : fonction pointeur pour stopper l'action
+*/
+void avancerCm(float distance, float time, bool (*callback)())
 {
     int32_t pulse_distance = nbrPulses(distance);
     int32_t nbr_pulse = 0;
@@ -26,6 +28,10 @@ void avancerCm(float distance, float time)
 
     while (nbr_pulse < pulse_distance)
     {
+        if(callback)
+            if(callback())
+                break;
+
         ENCODER_Reset(LEFT);
         ENCODER_Reset(RIGHT);
 
@@ -315,45 +321,54 @@ void setupPinces()
 
 void FaireParcoursA(COULEUR couleur)
 {
-if(couleur == ROUGE)
-{
-//Tourne a gauche pour être en angle de 45 par rapport au but vert
-avancerCm(100 , 2);
-tournerSurLuiMeme(90 ,1);
-}
-if(couleur == VERT)
-{
-    //Tourne a gauche pour être en angle de 45 par rapport au but rouge
-avancerCm(100 , 2);
-tournerSurLuiMeme(-90 ,1);
-}
-if(couleur == BLEU)
-{
-//Tourne a droit pour être en angle de 45 par rapport au but bleu
-tournerSurLuiMeme(90 ,1);
-}
-if(couleur == JAUNE)
-{
-//Tourne a gauche pour être en angle de 45 par rapport au but jaune
-tournerSurLuiMeme(90 ,1);
-}
+    bool (*p_detectionLigne)(void);
+    p_detectionLigne = detectionLigne;
 
-//Avancer jusqu'a trouver un ligne blanche
-DecisionDirection();
-ScannerPourBalle();
-fermerPinces();
+    switch (couleur)
+    {
+    case ROUGE:
+        //Tourne a gauche pour être en angle de 45 par rapport au but vert
+        avancerCm(100 , 2, NULL);
+        tournerSurLuiMeme(90 ,1);
+        break;
+    
+    case VERT:
+        //Tourne a gauche pour être en angle de 45 par rapport au but rouge
+        avancerCm(100 , 2, NULL);
+        tournerSurLuiMeme(-90 ,1);
+        break;
+    
+    case BLEU:
+        //Tourne a droit pour être en angle de 45 par rapport au but bleu
+        tournerSurLuiMeme(90 ,1);
+        break;
+    
+    case JAUNE:
+        //Tourne a gauche pour être en angle de 45 par rapport au but jaune
+        tournerSurLuiMeme(90 ,1);
+        avancerCm(200, 5, p_detectionLigne);
+        break;
+    
+    default:
+        break;
+    }
 
-//Reculer pour revenir vers la ligne
-avancerCm(-100,2);
-tournerSurLuiMeme(180,1);
-DecisionDirection();
+    //Avancer jusqu'a trouver un ligne blanche
+    DecisionDirection();
+    ScannerPourBalle();
+    fermerPinces();
 
-//Dropper la balle dans le centre
-ouvrirPinces();
+    //Reculer pour revenir vers la ligne
+    avancerCm(-100,2, NULL);
+    tournerSurLuiMeme(180,1);
+    DecisionDirection();
 
-//DECALISSÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉ
-avancerCm(-200,5);
-delay(1000000000);
+    //Dropper la balle dans le centre
+    ouvrirPinces();
+
+    //DECALISSÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉ
+    avancerCm(-200,5, NULL);
+    delay(1000000000);
 }
 
 

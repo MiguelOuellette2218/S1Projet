@@ -49,6 +49,7 @@ void TurnNoMoving(float speed, float huitTour, bool direction);
 */
 int IdentifierPossibilite(float);
 bool DecisionDirection();
+bool detectionLigne();
 void ScannerPourBalle();
 /*
 *   END Fonctions Mig

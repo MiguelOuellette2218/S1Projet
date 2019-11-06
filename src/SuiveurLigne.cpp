@@ -14,6 +14,7 @@ Possibilité possible du captage du voltage du circuit , le premier chiffre éta
 111 4.95
 */
 
+    // Pour robot avec pince
 	float possibilite[8]  = {2.16, 3.52, 4.22, 0.74, 2.79, 0.2, 1.44, 4.8};
 
 	float difference = 0.2;
@@ -42,8 +43,8 @@ bool DecisionDirection()
     static int counter = 0;
 
     //Initialisation du pointeur récursif
-    bool (*p_DecisionDirection)(void);
-    p_DecisionDirection = DecisionDirection;
+    //bool (*p_DecisionDirection)(void);
+    //p_DecisionDirection = DecisionDirection;
     
     int possibilite = IdentifierPossibilite((float)(analogRead(A0)*(5.0 / 1023.0)));
 
@@ -51,7 +52,7 @@ bool DecisionDirection()
     {
         case 0:
             // Tourner à gauche légèrement
-            MOTOR_SetSpeed(LEFT, 0.35);
+            MOTOR_SetSpeed(LEFT, 0.4);
             MOTOR_SetSpeed(RIGHT, 0.5);
             counter = 0;
             break;
@@ -64,19 +65,19 @@ bool DecisionDirection()
         case 2:
             // Tourner à droite légèrement
             MOTOR_SetSpeed(LEFT, 0.5);
-            MOTOR_SetSpeed(RIGHT, 0.35);
+            MOTOR_SetSpeed(RIGHT, 0.4);
             counter = 0;
             break;
         case 3:
             // Tourner à gauche aggressivement
-            MOTOR_SetSpeed(LEFT, 0.25);
+            MOTOR_SetSpeed(LEFT, 0.35);
             MOTOR_SetSpeed(RIGHT, 0.5);
             counter = 0;
             break;
         case 4:
             // Tourner à droite aggressivement
             MOTOR_SetSpeed(LEFT, 0.5);
-            MOTOR_SetSpeed(RIGHT, 0.25);
+            MOTOR_SetSpeed(RIGHT, 0.35);
             counter = 0;
             break;
         /*case 5:
@@ -114,4 +115,15 @@ bool DecisionDirection()
     Serial.print("Counter : ");
     Serial.println(counter);
     return breaker;
+}
+
+/*
+* Fonction qui détecte la présence d'une ligne
+* Retourne true si il trouve une ligne false s'il ne trouve rien  
+*/
+bool detectionLigne(){
+    if(IdentifierPossibilite((float)(analogRead(A0)*(5.0 / 1023.0))) != 7)
+        return true;
+
+    return false;
 }
