@@ -9,6 +9,8 @@
 #define KP 0.00065  // 20A
 #define KI 0.000009 // 20A
 
+enum COULEUR {ROUGE, VERT, BLEU , JAUNE};
+
 /*
     * Fonction qui permet de faire avancer le robot en fonction d'une distance
     * float distance : distance en cm
@@ -238,15 +240,19 @@ void ScannerPourBalle()
 {
     // tournerSurLuiMeme(-90, 1);
         // tourner a 45 degrée
+         float pSpeed [2] = {50,50};
     TurnNoMoving(.5, 1,0);
+
     //TurnNoMoving()
 
     int incrementAngle = 36;
 
-    float distanceCapteur = (5000/ ROBUS_ReadIR(2)+ 5);
+    //float distanceCapteur = (5000/ ROBUS_ReadIR(2)+ 5);
+
+    float distanceCapteur = (-0.0943*ROBUS_ReadIR(1)) + (float)56.5 - 10;
     float AnciennedistanceCapteur = distanceCapteur;
 
-    float difference = 40;
+    float difference = 30;
 
     float anglePetit = (float)180/incrementAngle;
 
@@ -258,7 +264,7 @@ void ScannerPourBalle()
     {
         //Attribue l'ancienne valeur de distance à une variable puis change la valeur de la distance du présent
         //AnciennedistanceCapteur = distanceCapteur;
-        distanceCapteur = (5000/ ROBUS_ReadIR(2)+ 5);
+        distanceCapteur = (-0.0943*ROBUS_ReadIR(1)) + (float)56.5 - 10;
        
             //Trouve si l'ancienne distance par rapport a la nouvelle est trop differente (donc qu'il y a probablement un object devant lui)
             if (distanceCapteur <difference )
@@ -269,17 +275,18 @@ void ScannerPourBalle()
                 delay(200);
                 //TurnNoMoving(.5, anglePetit*2, 1);
                 //delay(200);
-                avancerCm(distanceCapteur, 0.5);
+                //avancerCm(distanceCapteur + 5, 0.5);
+                
+                MoveFoward(distanceCapteur,pSpeed ,0);
+
+                
+                
                 break;
             }
             else
             {
                 //tournerSurLuiMeme((int)10,(float)200);
                 //TurnNoMoving(.5, anglePetit, 1);
-
-                
-
-                
             }
         
         delay(100);
@@ -302,4 +309,62 @@ void setupPinces()
     SERVO_Enable(0);
     delay(200);
     ouvrirPinces();
+}
+
+
+
+void FaireParcoursA(COULEUR couleur)
+{
+if(couleur == ROUGE)
+{
+//Tourne a gauche pour être en angle de 45 par rapport au but vert
+avancerCm(100 , 2);
+tournerSurLuiMeme(90 ,1);
+}
+if(couleur == VERT)
+{
+    //Tourne a gauche pour être en angle de 45 par rapport au but rouge
+avancerCm(100 , 2);
+tournerSurLuiMeme(-90 ,1);
+}
+if(couleur == BLEU)
+{
+//Tourne a droit pour être en angle de 45 par rapport au but bleu
+tournerSurLuiMeme(90 ,1);
+}
+if(couleur == JAUNE)
+{
+//Tourne a gauche pour être en angle de 45 par rapport au but jaune
+tournerSurLuiMeme(90 ,1);
+}
+
+//Avancer jusqu'a trouver un ligne blanche
+DecisionDirection();
+ScannerPourBalle();
+fermerPinces();
+
+//Reculer pour revenir vers la ligne
+avancerCm(-100,2);
+tournerSurLuiMeme(180,1);
+DecisionDirection();
+
+//Dropper la balle dans le centre
+ouvrirPinces();
+
+//DECALISSÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉ
+avancerCm(-200,5);
+delay(1000000000);
+}
+
+
+void FaireParcoursB( COULEUR couleur )
+{
+    //Attendre le temps que le premier robot fasse sa job
+delay(1000*60);
+
+//Scan pour la balle
+ScannerPourBalle();
+
+//PArt a course pour le yeet dans un but
+//BallonChasseur(couleur);
 }
