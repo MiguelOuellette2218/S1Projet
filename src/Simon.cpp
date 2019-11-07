@@ -5,7 +5,7 @@
 
 void TurnNoMoving(float speed, float huitTour, bool direction)
 {
-    int pulseDistance = ((UnHuit * huitTour * PULSEPARTOUR) / CIRCONFERENCE) - 85;
+    int pulseDistance = ((UnHuit * huitTour * PULSEPARTOUR) / CIRCONFERENCE) + 5;
     ENCODER_ReadReset(LEFT);
     ENCODER_ReadReset(RIGHT);
     int time = 0;
@@ -15,7 +15,6 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
     int newLeft = 0;
     int newRight = 0;
     float pSpeed [2] = {1,1};//pSpeed[0]=Speed Gauche //pSpeed[1]=Speed Droit
-
     if(direction)//Turn Right
     {
         while ((ENCODER_Read(LEFT) < pulseDistance) && (ENCODER_Read(RIGHT) > (0 - pulseDistance)))
@@ -27,16 +26,32 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
                 lastRight = newRight;
                 newLeft = ENCODER_Read(LEFT);
                 newRight = ENCODER_Read(RIGHT);
-                Serial.println("Left");
-                Serial.println(newLeft - lastLeft);
-                Serial.println("Right");
-                Serial.println(0 - (newRight - lastRight));
-                Serial.println(" ");
                 AdjustSpeed(newLeft - lastLeft, 0,  0 - (newRight - lastRight), 0, pSpeed, speed);
                 MOTOR_SetSpeed(LEFT, speed * pSpeed[0]); //- pSpeed[0]);
                 MOTOR_SetSpeed(RIGHT, (0 - speed) * pSpeed[1]);
             }
         }
+        newLeft = ENCODER_Read(LEFT);
+        newRight = ENCODER_Read(RIGHT);
+        if(newLeft < pulseDistance)
+        {
+            MOTOR_SetSpeed(RIGHT, 0);
+            while(newLeft < pulseDistance)
+            {
+                newLeft = ENCODER_Read(LEFT);
+            }
+            MOTOR_SetSpeed(LEFT, 0);
+        }
+        else if(newRight < (0 - pulseDistance))
+        {
+            MOTOR_SetSpeed(LEFT, 0);
+            while(newRight < (0 - pulseDistance))
+            {
+                newRight = ENCODER_Read(RIGHT);
+            }
+            MOTOR_SetSpeed(RIGHT, 0);
+        }
+
     }
     else
     {
@@ -48,17 +63,32 @@ void TurnNoMoving(float speed, float huitTour, bool direction)
                 lastLeft = newLeft;
                 lastRight = newRight;
                 newLeft = ENCODER_Read(LEFT);
-                newRight = ENCODER_Read(RIGHT); 
-                Serial.println("Left");
-                Serial.println(newLeft - lastLeft);
-                Serial.println("Right");
-                Serial.println(0 - (newRight - lastRight));
-                Serial.println(" ");        
+                newRight = ENCODER_Read(RIGHT);       
                 AdjustSpeed(0 - (newLeft - lastLeft), 0 , newRight - lastRight, 0 , pSpeed,speed);
                 MOTOR_SetSpeed(LEFT, (0 - speed) * pSpeed[0]); //- pSpeed[0]);
                 MOTOR_SetSpeed(RIGHT, speed * pSpeed[1]);
             }
         }  
+        newLeft = ENCODER_Read(LEFT);
+        newRight = ENCODER_Read(RIGHT);
+        if(newLeft > (0 - pulseDistance))
+        {
+            MOTOR_SetSpeed(RIGHT, 0);
+            while(newLeft > (0 - pulseDistance))
+            {
+                newLeft = ENCODER_Read(LEFT);
+            }
+            MOTOR_SetSpeed(LEFT, 0);
+        }
+        else if(newRight < pulseDistance)
+        {
+            MOTOR_SetSpeed(LEFT, 0);
+            while(newRight < pulseDistance)
+            {
+                newRight = ENCODER_Read(RIGHT);
+            }
+            MOTOR_SetSpeed(RIGHT, 0);
+        }
     }
     
      MOTOR_SetSpeed(RIGHT, 0);

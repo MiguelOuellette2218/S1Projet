@@ -9,7 +9,7 @@ void setup() {
   BoardInit();
   Serial.begin(9600);  
   delay(1500);
-  FaireParcoursA(JAUNE);
+ // FaireParcoursA(JAUNE);
 
 }
 
@@ -18,9 +18,12 @@ void loop()
   //Serial.println(ROBUS_ReadIR(2));
   //DecisionDirection();
   //float speed[2] ={0.3,0.3};
+  while(1)
+  {
+    TurnNoMoving(0.3,2,1);
+    delay(1000);
+  }
   
-  
-
   //BallonChasseur(1);
   //while(1);
 }
