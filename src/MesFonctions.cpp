@@ -9,7 +9,6 @@
 #define KP 0.00065  // 20A
 #define KI 0.000009 // 20A
 
-enum COULEUR {ROUGE, VERT, BLEU , JAUNE};
 
 /*
 * Fonction qui permet de faire avancer le robot en fonction d'une distance
@@ -41,6 +40,53 @@ void avancerCm(float distance, float time, bool (*callback)())
         Serial.print(pwmL);
         Serial.print("   -   ");
         Serial.println(pwmR);
+
+        // Définition de la vitesse
+        MOTOR_SetSpeed(LEFT, pwmL);
+        MOTOR_SetSpeed(RIGHT, pwmR);
+
+        delay(DELAY);
+
+        // Correction de la vitesse
+        pwmL += corrige_vitesse(LEFT, vitesse_cible);
+        pwmR += corrige_vitesse(RIGHT, vitesse_cible);
+
+        nbr_pulse += ENCODER_Read(LEFT);
+    }
+
+    // Arrêt des moteurs
+    MOTOR_SetSpeed(LEFT, 0);
+    MOTOR_SetSpeed(RIGHT, 0);
+}
+
+void reculerCm(float distance, float time, bool (*callback)())
+{
+    int32_t pulse_distance = -1*nbrPulses(distance);
+    int32_t nbr_pulse = 0;
+    int32_t vitesse_cible = -1*setSetpoint(distance, DELAY, time);
+
+    float pwmL = 0;
+    float pwmR = 0.04;
+
+    
+    while (nbr_pulse > pulse_distance)
+    {
+        if(callback)
+            if(callback())
+                break;
+        
+        ENCODER_Reset(LEFT);
+        ENCODER_Reset(RIGHT);
+
+        
+
+        //vitesse_cible = ralentir(vitesse_cible, nbr_pulse, pulse_distance, 20);
+
+        // Debug
+        Serial.print(pwmL);
+        Serial.print("   -   ");
+        Serial.println(pwmR);
+        Serial.println(nbr_pulse);
 
         // Définition de la vitesse
         MOTOR_SetSpeed(LEFT, pwmL);
@@ -346,54 +392,59 @@ void setupGate()
 
 void FaireParcoursA(COULEUR couleur)
 {
-    bool (*p_detectionLigne)(void);
-    p_detectionLigne = detectionLigne;
+    /*bool (*p_detectionLigne)(void);
+    p_detectionLigne = detectionLigne;*/
 
     switch (couleur)
     {
     case ROUGE:
         //Tourne a gauche pour être en angle de 45 par rapport au but vert
-        avancerCm(100 , 2, NULL);
-        tournerSurLuiMeme(RIGHT, 90 ,1);
+       // avancerCm(100 , 2, NULL);
+        //tournerSurLuiMeme(RIGHT, 90 ,1);
         break;
     
     case VERT:
         //Tourne a gauche pour être en angle de 45 par rapport au but rouge
-        avancerCm(100 , 2, NULL);
-        tournerSurLuiMeme(LEFT, 90 ,1);
+        //avancerCm(100 , 2, NULL);
+       // tournerSurLuiMeme(LEFT, 90 ,1);
         break;
     
     case BLEU:
         //Tourne a droit pour être en angle de 45 par rapport au but bleu
-        tournerSurLuiMeme(RIGHT, 90 ,1);
+        //tournerSurLuiMeme(RIGHT, 90 ,1);
         break;
     
     case JAUNE:
         //Tourne a gauche pour être en angle de 45 par rapport au but jaune
-        tournerSurLuiMeme(RIGHT, 90 ,1);
-        avancerCm(200, 5, p_detectionLigne);
+        tournerSurLuiMeme(LEFT, 90 ,1);
+        avancerCm(42, 3, NULL);
+        tournerSurLuiMeme(LEFT, 45 ,1);
         break;
     
     default:
         break;
     }
 
-    //Avancer jusqu'a trouver un ligne blanche
-    DecisionDirection();
-    ScannerPourBalle();
-    fermerPinces();
+    //Avancer jusqu'a trouver un ligne blanche**hardcode finalement
+    ouvrirGate();
+    avancerCm(70, 5, NULL);
+    fermerGate();
+    delay(1000);
 
     //Reculer pour revenir vers la ligne
-    avancerCm(-100,2, NULL);
+    reculerCm(40,2, NULL);
     tournerSurLuiMeme(RIGHT, 180,1);
-    DecisionDirection();
+    avancerCm(75, 5, NULL);
+
+    //DecisionDirection();
 
     //Dropper la balle dans le centre
-    ouvrirPinces();
+    ouvrirGate();
+    delay(1000);
 
     //DECALISSÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉÉ
-    avancerCm(-200,5, NULL);
-    delay(1000000000);
+    reculerCm(40, 4, NULL);
+    
 }
 
 

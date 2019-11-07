@@ -2,21 +2,27 @@
 
 #define CIRCONFERENCE 24.25
 
+
 void setup() {
   // put your setup code here, to run once:
 
   BoardInit();
   Serial.begin(9600);  
+  delay(1500);
+  FaireParcoursA(JAUNE);
+
 }
 
-void loop() {
+void loop() 
+{
   //Serial.println(ROBUS_ReadIR(2));
   //DecisionDirection();
-  float speed[2] ={0.3,0.3};
-  setupGate();
-  BallonChasseur(1);
-  while(1);
-  delay(200);
+  //float speed[2] ={0.3,0.3};
+  
+  
+
+  //BallonChasseur(1);
+  //while(1);
 }
 
 int mainbumper()

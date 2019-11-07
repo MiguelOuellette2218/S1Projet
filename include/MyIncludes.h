@@ -2,7 +2,7 @@
 #include <LibRobus.h>
 
 #include <math.h>
-
+enum COULEUR {ROUGE, VERT, BLEU , JAUNE};
 /*
 *   Fonction Gab
 */
@@ -10,7 +10,8 @@ int32_t nbrPulses(float cm);
 int32_t setSetpoint(float cm, float cycle, float time);
 
 // Note: refaire c'est fonction de manière plus intéligente, (redondance)
-void avancerCm(float distance, float time);
+void avancerCm(float distance, float time, bool (*)(void));
+void reculerCm(float distance, float time, bool (*)(void));
 void avancerMoteurCm(int motor, float distance, float time);
 void tournerSurUneRoue(int motor, int angle, float time);
 
@@ -55,6 +56,7 @@ void ScannerPourBalle();
 /*
 *   END Fonctions Mig
 */
+void FaireParcoursA(COULEUR couleur);
 
  void BallonChasseur(int cas);
 /*
