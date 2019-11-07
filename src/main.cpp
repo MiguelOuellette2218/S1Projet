@@ -11,7 +11,11 @@ void setup() {
 
 void loop() {
   //Serial.println(ROBUS_ReadIR(2));
-  DecisionDirection();
+  //DecisionDirection();
+  float speed[2] ={0.3,0.3};
+  setupGate();
+  BallonChasseur(1);
+  while(1);
   delay(200);
 }
 

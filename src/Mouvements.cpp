@@ -70,6 +70,87 @@ void MoveFoward(float cm, float* speed, bool (*callback)(void))
     speed[1] = speedD + pSpeed[1];  
 }
 
+void Turn(float* speed, float huitTour, bool direction)
+{
+    int pulseDistance = (UnHuit * huitTour * PULSEPARTOUR) / CIRCONFERENCE;
+    ENCODER_ReadReset(LEFT);
+    ENCODER_ReadReset(RIGHT);
+    int time = 0;
+    int oldTime = 0;
+    int lastLeft = 0;
+    int lastRight = 0;
+    int newLeft = 0;
+    int newRight = 0;
+    float pSpeed [2] = {0,0};//pSpeed[0]=Speed Gauche //pSpeed[1]=Speed Droit
+    float speedG, speedD;
+    if(direction)
+    {
+        speedG = speed[0];//Partir lentement
+        speedD = 0 - speed[1];
+    }
+    else
+    {
+        speedG = 0 - speed[0];//Partir lentement
+        speedD = speed[1];
+    }
+    float ralentissement = 0;
+    if(direction)//Turn Right
+    {
+        while ((ENCODER_Read(LEFT) < pulseDistance) && (ENCODER_Read(RIGHT) > (0 - pulseDistance)))
+        {
+            time = millis();   
+            if(time - oldTime > 49)
+            { 
+                lastLeft = newLeft;
+                lastRight = newRight;
+                newLeft = ENCODER_Read(LEFT);
+                newRight = ENCODER_Read(RIGHT);
+                int erreurVitesse = (abs(newLeft) - abs(lastLeft)) - (abs(newRight) - abs(lastRight));
+                int erreurPosition = abs(newLeft) -  abs(newRight);
+                Serial.println(erreurVitesse);
+                Serial.println(erreurPosition);
+                Serial.println("_");
+                PID(erreurVitesse,erreurPosition, pSpeed, speedD);
+                //MOTOR_SetSpeed(LEFT, speed * pSpeed[0]); //- pSpeed[0]);
+                //MOTOR_SetSpeed(RIGHT, (0 - speed) * pSpeed[1]);
+
+                MOTOR_SetSpeed(LEFT, speedG - pSpeed[0]);
+                MOTOR_SetSpeed(RIGHT,speedD + pSpeed[1] - USEROBOT);
+            }
+        }
+    }
+    else
+    {
+        while ((ENCODER_Read(LEFT) > (0 - pulseDistance)) && (ENCODER_Read(RIGHT) < pulseDistance))
+        {
+            time = millis();   
+            if(time - oldTime > 49)
+            { 
+                lastLeft = newLeft;
+                lastRight = newRight;
+                newLeft = ENCODER_Read(LEFT);
+                newRight = ENCODER_Read(RIGHT);    
+                //ADJUST AND SET SPEED
+                int erreurVitesse = (abs(newLeft) - abs(lastLeft)) - (abs(newRight) - abs(lastRight));
+                int erreurPosition = abs(newLeft) -  abs(newRight);
+                Serial.println(erreurVitesse);
+                Serial.println(erreurPosition);
+                Serial.println("_");
+                PID(erreurVitesse,erreurPosition, pSpeed, speedD);
+                //MOTOR_SetSpeed(LEFT, (0 - speed) * pSpeed[0]); //- pSpeed[0]);
+                //MOTOR_SetSpeed(RIGHT, speed * pSpeed[1]);
+                MOTOR_SetSpeed(LEFT,speedG - pSpeed[0]);
+                MOTOR_SetSpeed(RIGHT,speedD + pSpeed[1] - USEROBOT);
+            }
+        }  
+    }
+    
+     MOTOR_SetSpeed(RIGHT, 0);
+     MOTOR_SetSpeed(LEFT, 0); 
+        speed[0] = speedG + pSpeed[0];
+        speed[1] = speedD + pSpeed[1];  
+}
+
 void PID(int erreurVitesse, int erreurPosition, float* pSpeed, float speed)
 {
     static int oldErreurVitesse = 0;

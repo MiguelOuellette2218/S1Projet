@@ -32,9 +32,10 @@ float arc(float rayon, float angle);
 */
 void MoveFoward(float cm, float* speed, bool (*callback)(void));
 void PID(int erreurVitesse, int erreurPosition, float* pSpeed, float speed);
-
+void Turn(float speed, float huitTour, bool direction);
 void AdjustSpeed(int gauche,int gaucheDistance, int droit, int droitDistance, float* pSpeed, float speed);
 void TurnNoMoving(float speed, float huitTour, bool direction);
+void Turn(float* speed, float huitTour, bool direction);
 #define K 0.0001
 #define CIRCONFERENCE 23.94
 #define PULSEPARTOUR 3200
@@ -55,7 +56,7 @@ void ScannerPourBalle();
 *   END Fonctions Mig
 */
 
-
+ void BallonChasseur(int cas);
 /*
 *   Pinces
 */

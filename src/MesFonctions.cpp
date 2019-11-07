@@ -408,3 +408,49 @@ ScannerPourBalle();
 //PArt a course pour le yeet dans un but
 //BallonChasseur(couleur);
 }
+
+
+void BallonChasseur(int cas)
+{
+    float speed[2] = {0.3,0.3};
+    switch(cas)
+    {
+        case 1://Bleu
+        TurnNoMoving(0.2,2,1);
+        MoveFoward(37,speed,0);
+        TurnNoMoving(0.2,3,0);
+        ouvrirGate();
+        ScannerPourBalle();
+        MoveFoward(150,speed,0);
+        break;
+        case 2://Vert
+        TurnNoMoving(0.2,2,1);
+        MoveFoward(37,speed,0);
+        TurnNoMoving(0.2,2,0);
+        MoveFoward(70,speed,0);
+        TurnNoMoving(0.2,3,0);
+        ScannerPourBalle();
+        MoveFoward(150,speed,0);
+        break;
+        case 3://Rouge
+        TurnNoMoving(0.2,2,1);
+        MoveFoward(37,speed,0);
+        TurnNoMoving(0.2,2,1);
+        MoveFoward(70,speed,0);
+        TurnNoMoving(0.2,3,1);
+        ScannerPourBalle();
+        MoveFoward(150,speed,0);
+        break;
+        case 4://Jaune
+        TurnNoMoving(0.2,2,0);
+        MoveFoward(37,speed,0);
+        TurnNoMoving(0.2,3,1);
+        ScannerPourBalle();
+        MoveFoward(150,speed,0);
+        break;
+    }
+
+
+
+
+}
