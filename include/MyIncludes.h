@@ -31,7 +31,7 @@ float arc(float rayon, float angle);
 /*
 *   Fonctions Simon
 */
-void MoveFoward(float cm, float* speed, bool (*callback)(void));
+void MoveForward(float cm, float* speed, bool (*callback)(void));
 void PID(int erreurVitesse, int erreurPosition, float* pSpeed, float speed);
 void Turn(float speed, float huitTour, bool direction);
 void AdjustSpeed(int gauche,int gaucheDistance, int droit, int droitDistance, float* pSpeed, float speed);
@@ -45,7 +45,6 @@ void Turn(float* speed, float huitTour, bool direction);
 *   END Fonctions Simon
 */
 
-
 /*
 *   Suiveur de ligne 
 */
@@ -53,21 +52,20 @@ int IdentifierPossibilite(float);
 bool DecisionDirection();
 bool detectionLigne();
 void ScannerPourBalle();
+
+
 /*
-*   END Fonctions Mig
+*   Parcours du combattant
 */
 void FaireParcoursA(COULEUR couleur);
 void FaireParcoursB(COULEUR couleur);
 
- void BallonChasseur(int cas);
 /*
 *   Pinces
 */
-
 void setupPinces();
 void fermerPinces();
 void ouvrirPinces();
-
 void setupGate();
 void fermerGate();
 void ouvrirGate();

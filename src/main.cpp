@@ -1,31 +1,15 @@
-#include"MyIncludes.h"
+#include "MyIncludes.h"
 
-#define CIRCONFERENCE 24.25
-
-
-void setup() {
+void setup()
+{
   // put your setup code here, to run once:
-
   BoardInit();
-  Serial.begin(9600);  
+  Serial.begin(9600);
   delay(1500);
- // FaireParcoursA(JAUNE);
-
 }
 
-void loop() 
+void loop()
 {
-  //Serial.println(ROBUS_ReadIR(2));
-  //DecisionDirection();
-  //float speed[2] ={0.3,0.3};
-  while(1)
-  {
-    TurnNoMoving(0.3,2,1);
-    delay(1000);
-  }
-  
-  //BallonChasseur(1);
-  //while(1);
 }
 
 int mainbumper()
