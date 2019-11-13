@@ -57,6 +57,7 @@ void ScannerPourBalle();
 *   END Fonctions Mig
 */
 void FaireParcoursA(COULEUR couleur);
+void FaireParcoursB(COULEUR couleur);
 
  void BallonChasseur(int cas);
 /*
