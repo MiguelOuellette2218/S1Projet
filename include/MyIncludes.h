@@ -69,3 +69,8 @@ void ouvrirPinces();
 void setupGate();
 void fermerGate();
 void ouvrirGate();
+
+//  fonction bluetooth
+
+void Bluetooth();
+void BluetoothRead(char* Tableau);

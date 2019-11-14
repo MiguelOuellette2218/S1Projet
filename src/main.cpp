@@ -5,11 +5,14 @@ void setup()
   // put your setup code here, to run once:
   BoardInit();
   Serial.begin(9600);
+  Serial1.begin(9600);
   delay(1500);
+  Bluetooth();
 }
 
 void loop()
 {
+  
 }
 
 int mainbumper()
