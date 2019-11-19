@@ -72,5 +72,5 @@ void ouvrirGate();
 
 //  fonction bluetooth
 
-void Bluetooth();
+int Bluetooth();
 void BluetoothRead(char* Tableau);
