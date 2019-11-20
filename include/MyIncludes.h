@@ -74,3 +74,8 @@ void ouvrirGate();
 
 int Bluetooth();
 void BluetoothRead(char* Tableau);
+
+int comparateurIR();
+void mouvementIR ();
+int distance_Sonar();
+void mvmt_sonar();
