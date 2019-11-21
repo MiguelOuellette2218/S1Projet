@@ -79,3 +79,4 @@ int comparateurIR();
 void mouvementIR ();
 int distance_Sonar();
 void mvmt_sonar();
+float ConvertBitToDist(float input);

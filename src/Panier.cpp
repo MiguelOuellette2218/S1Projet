@@ -1,28 +1,54 @@
 #include "MyIncludes.h"
+#include <math.h>
+
+float ConvertBitToDist(float input)
+{
+    
+    
+  
+
+    double voltage = (input*5)/1023;
+    double dist = (-13.632*pow(voltage,6) 
+    + 101.03*pow(voltage, 6)
+    - 246*pow(voltage,4) 
+    + 135.61*pow(voltage, 3)
+     + 317.15*pow(voltage, 2) +
+     499.12*voltage + 227.22);
+
+
+
+    return dist;
+   
+
+}
 
 int comparateurIR()
-{
-    int capteurIRG = ROBUS_ReadIR(0);
-    int capteurIRD = ROBUS_ReadIR(1);
-   //Serial.println(capteurIRG);
-   //Serial.println(capteurIRD);
+{   
+    
+    float distanceD = ConvertBitToDist(ROBUS_ReadIR(0));
+    float distanceG = ConvertBitToDist(ROBUS_ReadIR(1));
+  
+    float capteurIRG = distanceG;
+    float capteurIRD = distanceD;
+    Serial.println(distanceG);
+    Serial.println(distanceD);
     //Serial.println("##########");
     // code qui compare la valeur de chaque capteur infrarouge mais qui laisse un dead zone 
 
     // les deux capteurs captent la meme distance
-    if (capteurIRD == capteurIRG)
+    if (distanceD == distanceG)
     {
         return 0; 
     }
 
-    // le cote droit est plus proche du mur
-    if (capteurIRD < (capteurIRG + 100))
+    // le cote droit est plus loin du mur
+    if (distanceD > distanceG)
     {
         return -1;
     }
 
-    // le cote droit est plus loin du mur
-    if (capteurIRD > (capteurIRG + 100))
+    // le cote droit est plus proche du mur
+    if (distanceD < distanceG )
     {
         return -2; 
     }
