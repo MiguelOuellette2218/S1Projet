@@ -75,8 +75,10 @@ void ouvrirGate();
 int Bluetooth();
 void BluetoothRead(char* Tableau);
 
+//fonction de suiveur de mur
 int comparateurIR();
 void mouvementIR ();
-int distance_Sonar();
+int PersonneDevant();
 void mvmt_sonar();
 float ConvertBitToDist(float input);
+#define distancePersonne 30
