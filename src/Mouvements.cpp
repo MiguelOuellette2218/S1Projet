@@ -39,8 +39,9 @@ void MoveForward(float cm, float *speed, bool (*callback)(void))
     {
         time = millis();
         if (time - oldTime > 49)
-        {
-            // Fonction d'interruption
+        {       
+            AppelRFID();
+              // Fonction d'interruption
             if (callback) // Si l'adresse de calback est non NULL
                 if (callback())
                     break;

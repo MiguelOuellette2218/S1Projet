@@ -20,6 +20,7 @@ void AppelRFID()
 
     int readByte = Serial3.read();
 
+    //TODO : Briser la condition si il n'y a rien , pour sauver de la ressource et du temps
     if(readByte == 2) reading = true; //begining of tag
     if(readByte == 3) reading = false; //end of tag
 

@@ -85,9 +85,10 @@ float ConvertBitToDist(float input);
 
 //Fonction de RFID
 
-boolean compareTag(char one[], char two[])
-int TransformerCodeRFID(char tag[])
-void SonLED(int pin,int nbBuzz)
-void clearTag(char one[])
-void resetReader()
-void setupRFID()
+boolean compareTag(char one[], char two[]);
+int TransformerCodeRFID(char tag[]);
+void SonLED(int pin,int nbBuzz);
+void clearTag(char one[]);
+void resetReader();
+void setupRFID();
+void AppelRFID();
