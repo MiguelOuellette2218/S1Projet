@@ -82,3 +82,12 @@ int PersonneDevant();
 void mvmt_sonar();
 float ConvertBitToDist(float input);
 #define distancePersonne 30
+
+//Fonction de RFID
+
+boolean compareTag(char one[], char two[])
+int TransformerCodeRFID(char tag[])
+void SonLED(int pin,int nbBuzz)
+void clearTag(char one[])
+void resetReader()
+void setupRFID()
