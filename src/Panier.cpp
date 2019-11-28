@@ -1,5 +1,14 @@
 #include "MyIncludes.h"
 #include <math.h>
+void setupSONAR()
+{
+    delay(50);
+    SONAR_GetRange(1);
+    delay(50);
+    SONAR_GetRange(1);
+    delay(50);
+    SONAR_GetRange(1);
+}
 
 float ConvertBitToDist(float input)
 {
@@ -21,8 +30,8 @@ int comparateurIR()
     float distanceD = ConvertBitToDist(ROBUS_ReadIR(0));
     float distanceG = ConvertBitToDist(ROBUS_ReadIR(1));
   
-    float capteurIRG = distanceG;
-    float capteurIRD = distanceD;
+    //float capteurIRG = distanceG;
+    //float capteurIRD = distanceD;
     Serial.println(distanceG);
     Serial.println(distanceD);
     //Serial.println("##########");
@@ -41,23 +50,28 @@ int comparateurIR()
     }
 
     // le cote droit est plus proche du mur
-    if (distanceD < distanceG )
+    else if (distanceD < distanceG )
     {
         return -2; 
     }
+    
     
 }
 
 
 void mouvementIR ()
 {
-    if(PersonneDevant())
-    {
-        MOTOR_SetSpeed(0,0);
-        MOTOR_SetSpeed(1,0);
-    }
-    else
-    {
+    //PersonneDevant();
+
+    //if(PersonneDevant()==1)
+    //{
+    //    MOTOR_SetSpeed(0,0);
+        //MOTOR_SetSpeed(1,0);
+       // PersonneDevant();
+   // }
+   // else
+   // {
+
 
     //definir la vitesse desirer pour utiliser la fonction 
     int comparaison = comparateurIR(); //Lecture des distances
@@ -66,7 +80,7 @@ void mouvementIR ()
     while (comparaison == 0)
     {   
         //avancerCm(20, 5, NULL);
-           MOTOR_SetSpeed(0,0.3);
+        MOTOR_SetSpeed(0,0.3);
         MOTOR_SetSpeed(1,0.3);
         comparateurIR();
     }
@@ -77,7 +91,6 @@ void mouvementIR ()
         
         MOTOR_SetSpeed(0,0.3);
         MOTOR_SetSpeed(1,0.32);
-        delay(50);
        // MOTOR_SetSpeed(1,0);
        // MOTOR_SetSpeed(0,0);
         comparateurIR();
@@ -90,29 +103,54 @@ void mouvementIR ()
         
         MOTOR_SetSpeed(0,0.32);
         MOTOR_SetSpeed(1,0.3);
-        delay(50);
-       // MOTOR_SetSpeed(1,0);
+        //MOTOR_SetSpeed(1,0);
         //MOTOR_SetSpeed(0,0);
         comparateurIR();
       
-        }
+        
     }
 }
 
-int PersonneDevant()
+int PersonneDevant() //check la distance entre le robot et la personne
 {
-    int capteur_sonar = SONAR_GetRange(0);
+    float capteur_sonar = SONAR_GetRange(1);
     
     Serial.println(capteur_sonar);
     //Serial.println("##########");
     
     if(capteur_sonar > distancePersonne)
+    {
         return 0;
+    }
 
-    else if (capteur_sonar < distancePersonne)
+    else if (capteur_sonar <= distancePersonne)
+    {
         return 1;
+    }
+    
+}
+
+void MouvementDetection() //fonction qui utilise la detection de personne
+//ainsi que la fonction qui empeche de foncer dans les murs
+{
+    //float speed[2]={0.3,0.3};
+    int w = PersonneDevant();
+    if(w==0)
+    {
+       // MoveForward(2,speed,0); // essaye sans les mouvementIR
+        MOTOR_SetSpeed(0,0.3);
+        MOTOR_SetSpeed(1,0.3);
+        w = PersonneDevant();
+    }
+    else if (w==1)
+    {
+        MOTOR_SetSpeed(0,0);
+        MOTOR_SetSpeed(1,0);
+        w = PersonneDevant();
+    }
 
 }
+
 /* 
 void mvmt_sonar()
 {   

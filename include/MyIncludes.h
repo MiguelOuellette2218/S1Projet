@@ -79,6 +79,8 @@ void BluetoothRead(char* Tableau);
 int comparateurIR();
 void mouvementIR ();
 int PersonneDevant();
-void mvmt_sonar();
+//void mvmt_sonar();
 float ConvertBitToDist(float input);
 #define distancePersonne 30
+void MouvementDetection();
+void setupSONAR();
