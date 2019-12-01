@@ -86,13 +86,14 @@ int PersonneDevant();
 float ConvertBitToDist(float input);
 #define distancePersonne 30 //Nous pouvons essaie de diminuer cette distance
 void MouvementDetection();
-<<<<<<< HEAD
+
 void SetupSonar();
 
 //Fonction de RFID
 boolean compareTag(char one[], char two[]);
+void RFIDCheck();
 int TransformerCodeRFID(char tag[]);
-void SonLED(int pin,int nbBuzz);
+void SonLED(int nbBuzz);
 void clearTag(char one[]);
 void resetReader();
 void setupRFID();
@@ -116,10 +117,10 @@ static float tableauEmplacement[25] = {
     57.15,
     57.15,
     25.4,
-    /*Tourner à droite*/,2
+    /*Tourner à droite*/2,
      50.8 ,
      50.8,
-     /*Tourner à droite*/,2
+     /*Tourner à droite*/2,
     25.45,
     7.15,
     57.15,
@@ -128,7 +129,3 @@ void ParcourirBloc(int distance);
 void ParcourirProchainBloc(int direction);
 void ModePanique();
 void ModeBluetooth();
-=======
-void setupSONAR();
-float ConvertBitToDistV2(float input);
->>>>>>> d3a977b2e4a5d8ce1e24d7a1587cf5e3b63d91c1

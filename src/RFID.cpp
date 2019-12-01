@@ -1,26 +1,21 @@
 
 #include "MyIncludes.h"
-int RFIDResetPin = 13;
-#define PIN 2
 
-void setupRFID()
+void RFIDCheck()
 {
-  Serial3.begin(115200);
-  pinMode(RFIDResetPin, OUTPUT);
-  digitalWrite(RFIDResetPin, HIGH);
-  pinMode(PIN, OUTPUT);
+  if(Serial3.available())  AppelRFID();
+    
 }
 
 void AppelRFID()
 {
- //Serial.println(Serial2.read());
   char tagString[13]; //les cartes RFID utilise 12 charactère au total
   int index = 0;
   boolean reading = false;
-  while(Serial3.available()){
-
-    int readByte = Serial3.read();
-
+  delay(25);
+  while(Serial3.available())
+  {
+    int readByte = Serial3.read();//Fisrt
     if(readByte == 2) reading = true; //begining of tag
     if(readByte == 3) reading = false; //end of tag
 
@@ -31,27 +26,25 @@ void AppelRFID()
     }
   }
 
-  if(strlen(tagString) == 0);
-  else 
+  if(strlen(tagString) != 0)
   {
     int rep = TransformerCodeRFID(tagString);
     //Serial.println(tagString);
     //Serial.println(TransformerCodeRFID(tagString));
-    SonLED(PIN,rep);
-    Serial3.print((short)rep, HEX);
+    Serial2.print((short)rep);
+    SonLED(rep);
   }
   
   clearTag(tagString);
   clearTag(tagString);
-  resetReader();  
-
+  //resetReader();  
 }
 
 //Reset le lecteur RFID pour relir une autre carte
 void resetReader()
 {
-  digitalWrite(RFIDResetPin, LOW);
-  digitalWrite(RFIDResetPin, HIGH);
+ // digitalWrite(RFIDResetPin, LOW);
+  //digitalWrite(RFIDResetPin, HIGH);
   delay(1000);
 }
 
@@ -64,30 +57,25 @@ void clearTag(char one[])
 }
 //active la led et le son en sortant le voltage
 //de la pin X et en faisant X nbBuzz au buzzer
-void SonLED(int pin,int nbBuzz)
+void SonLED(int nbBuzz)
 {
   if(nbBuzz == -1)
   {
     for(int i = 0; i < 50; i++)
     {
-     digitalWrite(pin, HIGH);
-     delay(10);
-     digitalWrite(pin, LOW);
-     delay(10);
+      AX_BuzzerON(800, 1500);
     }
   }
-  else{
-  for(int j = 0; j < nbBuzz; j++)
+  else
   {
-    for(int i = 0; i < 10; i++)
+    for(int j = 0; j < nbBuzz; j++)
     {
-     digitalWrite(pin, HIGH);
-     delay(10);
-     digitalWrite(pin, LOW);
-     delay(10);
+      for(int i = 0; i < 10; i++)
+      {
+        AX_BuzzerON(1000, 500);
+      }
+      delay(100);
     }
-    delay(100);
-  }
   }
 }
 /*transforme la chaine de charactère donné par 
