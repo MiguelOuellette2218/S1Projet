@@ -1,8 +1,10 @@
 #include <Arduino.h>
 #include <LibRobus.h>
-
 #include <math.h>
+#include <stdio.h >
+
 enum COULEUR {ROUGE, VERT, BLEU , JAUNE};
+static int modeDeplacement =0;
 /*
 *   Fonction Gab
 */
@@ -31,7 +33,7 @@ float arc(float rayon, float angle);
 /*
 *   Fonctions Simon
 */
-void MoveForward(float cm, float* speed, bool (*callback)(void));
+float MoveForward(float cm, float* speed, bool (*callback)(void));
 void PID(int erreurVitesse, int erreurPosition, float* pSpeed, float speed);
 void Turn(float speed, float huitTour, bool direction);
 void AdjustSpeed(int gauche,int gaucheDistance, int droit, int droitDistance, float* pSpeed, float speed);
@@ -71,9 +73,10 @@ void fermerGate();
 void ouvrirGate();
 
 //  fonction bluetooth
-
+static char tableau[50] = {0};
 int Bluetooth();
 void BluetoothRead(char* Tableau);
+int ScanBluetooth();
 
 //fonction de suiveur de mur
 int comparateurIR();
@@ -83,4 +86,44 @@ int PersonneDevant();
 float ConvertBitToDist(float input);
 #define distancePersonne 30
 void MouvementDetection();
-void setupSONAR();
+void SetupSonar();
+
+//Fonction de RFID
+boolean compareTag(char one[], char two[]);
+int TransformerCodeRFID(char tag[]);
+void SonLED(int pin,int nbBuzz);
+void clearTag(char one[]);
+void resetReader();
+void setupRFID();
+void AppelRFID();
+
+//Fonction pour presentation finale
+static int emplacement =0;
+static int directionRobot =0;
+static int modePieton = 0;
+
+static float tableauEmplacement[25] = {
+    25.4,
+    57.15,
+    57.15,
+    25.4, 
+    /*Tourner à gauche*/1,
+    50.8 ,
+    50.8,
+    /*Tourner à gauche*/1,
+    25.4,
+    57.15,
+    57.15,
+    25.4,
+    /*Tourner à droite*/,2
+     50.8 ,
+     50.8,
+     /*Tourner à droite*/,2
+    25.45,
+    7.15,
+    57.15,
+    25.4};
+void ParcourirBloc(int distance);
+void ParcourirProchainBloc(int direction);
+void ModePanique();
+void ModeBluetooth();

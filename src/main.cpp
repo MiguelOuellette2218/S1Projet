@@ -7,12 +7,26 @@ void setup()
   Serial.begin(9600);
   Serial1.begin(9600);
   delay(1500);
-  //Bluetooth();
+  Bluetooth();
+  SetupSonar();
+}
+
+void ModeAutomatisee()
+{
 }
 
 void loop()
-{ 
-  mouvementIR();
+{
+
+  if (modeDeplacement == 0)
+  {
+    //Mode Bluetooth
+    ModeBluetooth();
+  }
+  else
+  {
+    //Mode Automatisé
+  }
 }
 
 int mainbumper()

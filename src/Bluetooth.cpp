@@ -2,8 +2,7 @@
 
 int Bluetooth()
 {
-    int Sortie = 0;
-    char tableau[50] = {0};
+    int Sortie = 0;  
     Serial.println("Bluetooth Send");
 
         Serial1.print("AT"); // (serial1) envoie AT au capteur.  le capteur recois AT qui est OK
@@ -27,17 +26,6 @@ int Bluetooth()
         Serial.print(tableau);
         if(tableau[0] != 'O' || tableau[1] != 'K')Sortie = 1;
     for(int i=0; i<50; i++)tableau[i] = 0; 
-
-        /*while(1)
-        {
-            if(Serial1.available())
-            {
-                BluetoothRead(tableau);
-                Serial.print(tableau);
-                for(int i=0; i<50; i++)tableau[i] = 0;  
-            }
-        }*/
-
     return Sortie;
 }
 
@@ -54,5 +42,23 @@ void BluetoothRead(char* Tableau)
            Tableau[i] = Serial1.read();
            i ++;
         }
+    }
+}
+
+int ScanBluetooth()
+{
+    if (Serial1.available())
+    {
+        BluetoothRead(tableau);
+        int output;
+        sscanf(tableau, "%d", &output);
+
+        for (int i = 0; i < 50; i++)
+            tableau[i] = 0;
+        return output;
+    }
+    else
+    {
+        return 0;
     }
 }

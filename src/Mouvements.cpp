@@ -17,8 +17,18 @@
 * float* speed: vitesse voulue
 * bool (*callback)(void): fonction d'intéruption de la méthode
 */
-void MoveForward(float cm, float *speed, bool (*callback)(void))
+float MoveForward(float cm, float *speed, bool (*callback)(void))
 {
+
+        if(cm == 0)
+        {
+            return 0;
+        }
+
+    Serial.println("Distance à parcourir"); 
+    Serial.println(cm);   
+
+
     delay(200);
     int32_t pulseDistance = (cm * PULSEPARTOUR) / CIRCONFERENCE;
     ENCODER_ReadReset(LEFT);
@@ -40,10 +50,17 @@ void MoveForward(float cm, float *speed, bool (*callback)(void))
         time = millis();
         if (time - oldTime > 49)
         {
-            // Fonction d'interruption
-            if (callback) // Si l'adresse de calback est non NULL
-                if (callback())
-                    break;
+            if(PersonneDevant() == 1 && modePieton==1)
+            {
+                MOTOR_SetSpeed(LEFT, 0);
+                MOTOR_SetSpeed(RIGHT, 0); 
+
+                float retourDistance = (ENCODER_Read(LEFT)*CIRCONFERENCE)/PULSEPARTOUR;
+              // float retourDistance = ENCODER_Read(LEFT);
+                return retourDistance;
+            }
+            else
+            {
 
             if (ENCODER_Read(LEFT) < pulseDistance - PULSEPARTOUR)
             { //Accélération
@@ -74,6 +91,7 @@ void MoveForward(float cm, float *speed, bool (*callback)(void))
             MOTOR_SetSpeed(RIGHT, speedD + pSpeed[1] - ralentissement + USEROBOT);
             time = millis();
             oldTime = time;
+            }
         }
     }
     //TURN TO 0 MOTORS
@@ -81,7 +99,42 @@ void MoveForward(float cm, float *speed, bool (*callback)(void))
     MOTOR_SetSpeed(RIGHT, 0);
     speed[0] = speedG + pSpeed[0];
     speed[1] = speedD + pSpeed[1];
+
+    return 0;
 }
+
+void ParcourirBloc(int distance)
+{
+    float pSpeed[2] = {0.3, 0.3};
+    float distanceParcourus = MoveForward(distance, pSpeed, false);
+    float distanceRestante = distance - distanceParcourus;
+    //Serial.println("feedbackDistance");
+    //         Serial.println(feedbackDistance);
+
+    if (modePieton == 1)
+    {
+        while (distanceRestante > 5)
+        {
+            if (PersonneDevant() == false)
+            {
+                pSpeed[0] = 0.3;
+                pSpeed[1] = 0.3;
+                distanceParcourus = MoveForward(distanceRestante, pSpeed, false);
+                distanceRestante = distanceRestante - distanceParcourus;
+
+                //feedbackDistance = distance -feedbackDistance;
+                Serial.println("distanceRestante");
+                Serial.println(distanceRestante);
+            }
+            else
+            {
+                MOTOR_SetSpeed(LEFT, 0);
+                MOTOR_SetSpeed(RIGHT, 0);
+            }
+        }
+    }
+}
+
 
 /*
 * Fonction pour tourner selon un huitieme de tour en avancant

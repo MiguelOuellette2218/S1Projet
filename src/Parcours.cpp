@@ -231,3 +231,125 @@ void ScannerPourBalle()
     //  MOTOR_SetSpeed(RIGHT, 0);
     //  return distanceTourner;
 }
+
+//Fonction qui est appeler lorsqu'on clique sur le bouton panique sur le telephone
+void ModePanique()
+{
+    for (size_t i = 0; i < 6; i++)
+    {
+        AX_BuzzerON(1000, 200);
+        delay(100);
+    }
+}
+
+//Mode de deplacement lorsque le mode de communication par bluetooth est activé
+//Cette fonction va être appeler à chaque loop pour prendre des decisions
+void ModeBluetooth()
+{
+    int input = ScanBluetooth();
+
+    if (input != 0)
+    {
+        if (input == 1)
+        {
+            //Aller au prochain point           
+             Serial.print("SENS NORMAL");
+            ParcourirProchainBloc(0);
+        }
+        else if (input == 2)
+        {
+             Serial.println("SENS INVERSE");
+            ParcourirProchainBloc(1);
+        }
+        //PANIC
+        else if (input == 4)
+        {
+             Serial.print("PPPPPAAAAANNNNNNIIIIIICCCCC");
+            ModePanique();
+        }
+        //MODE AUTONOME
+        else if (input == 5)
+        {
+            Serial.print("MODE Autonome");
+            modeDeplacement = 1;
+        }
+        //MODE BLUETOOTH
+        else if (input == 6)
+        {
+            Serial.print("MODE BLUETOOTH");
+            modeDeplacement = 0;
+        }
+    }
+}
+
+//Mode de deplacement lorsque le mode de communication par bluetooth est desactivé
+//Cette fonction va être appeler à chaque loop pour prendre des decisions basé sur le mode automatisé
+void ModeAutomatisee()
+{
+    int input = ScanBluetooth();
+
+    if (input != 0)
+    {
+        if (input == 1)
+        {
+            //Aller au prochain point           
+             Serial.print("SENS NORMAL");
+            ParcourirProchainBloc(0);
+        }
+        else if (input == 2)
+        {
+             Serial.println("SENS INVERSE");
+            ParcourirProchainBloc(1);
+        }
+        //PANIC
+        else if (input == 4)
+        {
+             Serial.print("PPPPPAAAAANNNNNNIIIIIICCCCC");
+            ModePanique();
+        }
+        //MODE AUTONOME
+        else if (input == 5)
+        {
+            Serial.print("MODE Autonome");
+            modeDeplacement = 1;
+        }
+        //MODE BLUETOOTH
+        else if (input == 6)
+        {
+            Serial.print("MODE BLUETOOTH");
+            modeDeplacement = 0;
+        }
+    }
+}
+
+//Fonction qui permet d'aller au prochain bloc dans le parcours final ,à
+// une direction de 0 s'ignifie dans la direction normal
+//une directon de -1 s'ignifie dans la direction opposé
+void ParcourirProchainBloc(int direction)
+{
+    //TODO:
+        //Implementer le tableau de distance
+        //Implementer les virages ainsi que les direction differentes
+        if(direction!=directionRobot)
+        {
+            tournerSurLuiMeme(1, 180, 1);
+            directionRobot = direction;
+        }    
+
+    if(emplacement-direction >0 &&emplacement-direction <21)
+    {
+        if(tableauEmplacement[emplacement-direction] == 1 )
+        {
+          tournerSurLuiMeme(0, 90,1);
+          emplacement++;
+        }
+        else if(tableauEmplacement[emplacement-direction] == 2 )
+        {
+          tournerSurLuiMeme(1, 90,1);
+          emplacement++;
+        }
+
+        ParcourirBloc(tableauEmplacement[emplacement-direction]);
+        emplacement++;
+    }
+}

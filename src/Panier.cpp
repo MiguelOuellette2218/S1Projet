@@ -1,6 +1,6 @@
 #include "MyIncludes.h"
 #include <math.h>
-void setupSONAR()
+void SetupSonar()
 {
     delay(50);
     SONAR_GetRange(1);
@@ -8,6 +8,7 @@ void setupSONAR()
     SONAR_GetRange(1);
     delay(50);
     SONAR_GetRange(1);
+    delay(250);
 }
 
 float ConvertBitToDist(float input)
@@ -15,7 +16,7 @@ float ConvertBitToDist(float input)
     double voltage = (input*5)/1023;
 
     double dist = -13.632*pow(voltage,6) 
-    + 101.03*pow(voltage, 6)
+    + 101.03*pow(voltage, 5)
     - 246*pow(voltage,4) 
     + 135.61*pow(voltage, 3)
      + 317.15*pow(voltage, 2) +
@@ -61,18 +62,6 @@ int comparateurIR()
 
 void mouvementIR ()
 {
-    //PersonneDevant();
-
-    //if(PersonneDevant()==1)
-    //{
-    //    MOTOR_SetSpeed(0,0);
-        //MOTOR_SetSpeed(1,0);
-       // PersonneDevant();
-   // }
-   // else
-   // {
-
-
     //definir la vitesse desirer pour utiliser la fonction 
     int comparaison = comparateurIR(); //Lecture des distances
 
@@ -105,17 +94,16 @@ void mouvementIR ()
         MOTOR_SetSpeed(1,0.3);
         //MOTOR_SetSpeed(1,0);
         //MOTOR_SetSpeed(0,0);
-        comparateurIR();
-      
-        
+        comparateurIR();            
     }
 }
 
-int PersonneDevant() //check la distance entre le robot et la personne
+//check la distance entre le robot et la personne
+int PersonneDevant() 
 {
     float capteur_sonar = SONAR_GetRange(1);
     
-    Serial.println(capteur_sonar);
+    //Serial.println(capteur_sonar);
     //Serial.println("##########");
     
     if(capteur_sonar > distancePersonne)
