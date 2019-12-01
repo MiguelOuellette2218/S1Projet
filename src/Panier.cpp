@@ -23,6 +23,17 @@ float ConvertBitToDist(float input)
 
     return dist;
 }
+float ConvertBitToDistV2(float input) // essaie d'une fonction qui permet de trouver la distance avec un IR
+{
+    float dist;
+    float voltage;
+    voltage = (float)input/1023 * 5;
+    
+    dist =(voltage-0.1)/20.33;
+    dist = 1/dist;
+
+    return dist;
+}
 
 int comparateurIR()
 {   

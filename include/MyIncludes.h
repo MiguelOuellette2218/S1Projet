@@ -81,6 +81,7 @@ void mouvementIR ();
 int PersonneDevant();
 //void mvmt_sonar();
 float ConvertBitToDist(float input);
-#define distancePersonne 30
+#define distancePersonne 30 //Nous pouvons essaie de diminuer cette distance
 void MouvementDetection();
 void setupSONAR();
+float ConvertBitToDistV2(float input);
