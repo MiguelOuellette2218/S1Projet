@@ -84,8 +84,9 @@ void mouvementIR ();
 int PersonneDevant();
 //void mvmt_sonar();
 float ConvertBitToDist(float input);
-#define distancePersonne 30
+#define distancePersonne 30 //Nous pouvons essaie de diminuer cette distance
 void MouvementDetection();
+<<<<<<< HEAD
 void SetupSonar();
 
 //Fonction de RFID
@@ -127,3 +128,7 @@ void ParcourirBloc(int distance);
 void ParcourirProchainBloc(int direction);
 void ModePanique();
 void ModeBluetooth();
+=======
+void setupSONAR();
+float ConvertBitToDistV2(float input);
+>>>>>>> d3a977b2e4a5d8ce1e24d7a1587cf5e3b63d91c1
