@@ -94,8 +94,9 @@ void SetupSonar();
 
 //Fonction de RFID
 boolean compareTag(char one[], char two[]);
+void RFIDCheck();
 int TransformerCodeRFID(char tag[]);
-void SonLED(int pin,int nbBuzz);
+void SonLED(int nbBuzz);
 void clearTag(char one[]);
 void resetReader();
 void setupRFID();
@@ -131,4 +132,3 @@ void ParcourirProchainBloc(int direction);
 void ModePanique();
 void ModeBluetooth();
 void ModeAutomatisee();
-
