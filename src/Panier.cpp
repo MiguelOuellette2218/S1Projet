@@ -106,13 +106,7 @@ void mouvementIR ()
         MOTOR_SetSpeed(0,0.3);
         //MOTOR_SetSpeed(1,0);
         //MOTOR_SetSpeed(0,0);
-<<<<<<< HEAD
-        comparateurIR();            
-=======
-        comparaison = comparateurIR();
-      
-        
->>>>>>> d3a977b2e4a5d8ce1e24d7a1587cf5e3b63d91c1
+         comparaison = comparateurIR();
     }
 }
 

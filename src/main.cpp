@@ -7,26 +7,40 @@ void setup()
   Serial.begin(9600);
   Serial1.begin(9600);
   delay(1500);
-  Bluetooth();
   SetupSonar();
-}
-
-void ModeAutomatisee()
-{
+  Bluetooth();
 }
 
 void loop()
 {
 
+  //ScanBluetooth();
+
+  //delay(100);
+
+  if (ROBUS_IsBumper(0)) // Bumper gauche
+  {
+   // ParcourirBloc(100);
+    
+  }
+  if (ROBUS_IsBumper(1)) // Bumper droite
+  {
+   // ParcourirBloc(100);
+   // Serial.println("Fin de parcour"); 
+  }
+  //  IsPaired();
+   
   if (modeDeplacement == 0)
   {
-    //Mode Bluetooth
     ModeBluetooth();
   }
   else
   {
-    //Mode Automatisé
+    ModeAutomatisee();
   }
+
+
+ 
 }
 
 int mainbumper()

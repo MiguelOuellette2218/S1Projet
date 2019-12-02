@@ -19,15 +19,8 @@
 */
 float MoveForward(float cm, float *speed, bool (*callback)(void))
 {
-
-        if(cm == 0)
-        {
-            return 0;
-        }
-
     Serial.println("Distance à parcourir"); 
     Serial.println(cm);   
-
 
     delay(200);
     int32_t pulseDistance = (cm * PULSEPARTOUR) / CIRCONFERENCE;
@@ -50,6 +43,7 @@ float MoveForward(float cm, float *speed, bool (*callback)(void))
         time = millis();
         if (time - oldTime > 49)
         {
+            
             if(PersonneDevant() == 1 && modePieton==1)
             {
                 MOTOR_SetSpeed(LEFT, 0);
@@ -58,9 +52,10 @@ float MoveForward(float cm, float *speed, bool (*callback)(void))
                 float retourDistance = (ENCODER_Read(LEFT)*CIRCONFERENCE)/PULSEPARTOUR;
               // float retourDistance = ENCODER_Read(LEFT);
                 return retourDistance;
-            }
+            }       
             else
             {
+                
 
             if (ENCODER_Read(LEFT) < pulseDistance - PULSEPARTOUR)
             { //Accélération
@@ -100,12 +95,12 @@ float MoveForward(float cm, float *speed, bool (*callback)(void))
     speed[0] = speedG + pSpeed[0];
     speed[1] = speedD + pSpeed[1];
 
-    return 0;
+    return cm;
 }
 
 void ParcourirBloc(int distance)
 {
-    float pSpeed[2] = {0.3, 0.3};
+    float pSpeed[2] = {0.5, 0.5};
     float distanceParcourus = MoveForward(distance, pSpeed, false);
     float distanceRestante = distance - distanceParcourus;
     //Serial.println("feedbackDistance");
@@ -120,6 +115,8 @@ void ParcourirBloc(int distance)
                 pSpeed[0] = 0.3;
                 pSpeed[1] = 0.3;
                 distanceParcourus = MoveForward(distanceRestante, pSpeed, false);
+                    Serial.println("Distance Parcouru");
+                   Serial.println(distanceParcourus);
                 distanceRestante = distanceRestante - distanceParcourus;
 
                 //feedbackDistance = distance -feedbackDistance;
@@ -133,6 +130,7 @@ void ParcourirBloc(int distance)
             }
         }
     }
+    
 }
 
 
@@ -140,7 +138,7 @@ void ParcourirBloc(int distance)
 * Fonction pour tourner selon un huitieme de tour en avancant
 * float speed: tableau de 2 element de vitesse de moteur
 * float* huittour: huitieme de 360 degree (ex : 45 degree =1 , 135 =3)
-* bool direction : permet de savoir la direction , 0 = par la gauche et 1 est par la droite
+* bool direction : permet de savoir la directifon , 0 = par la gauche et 1 est par la droite
 */
 void Turn(float *speed, float huitTour, bool direction)
 {
@@ -413,6 +411,9 @@ void AdjustSpeed(int gauche, int gaucheDistance, int droit, int droitDistance, f
 */
 void avancerCm(float distance, float time, bool (*callback)())
 {
+     Serial.println("Distance à parcourir");
+        Serial.println(distance);
+   
     int32_t pulse_distance = nbrPulses(distance);
     int32_t nbr_pulse = 0;
     int32_t vitesse_cible = setSetpoint(distance, DELAY, time);

@@ -2,6 +2,8 @@
 #include <LibRobus.h>
 #include <math.h>
 #include <stdio.h >
+#include <string.h>
+
 
 enum COULEUR {ROUGE, VERT, BLEU , JAUNE};
 static int modeDeplacement =0;
@@ -77,6 +79,8 @@ static char tableau[50] = {0};
 int Bluetooth();
 void BluetoothRead(char* Tableau);
 int ScanBluetooth();
+void LireBluetooth();
+int IsPaired();
 
 //fonction de suiveur de mur
 int comparateurIR();
@@ -86,7 +90,6 @@ int PersonneDevant();
 float ConvertBitToDist(float input);
 #define distancePersonne 30 //Nous pouvons essaie de diminuer cette distance
 void MouvementDetection();
-<<<<<<< HEAD
 void SetupSonar();
 
 //Fonction de RFID
@@ -101,8 +104,7 @@ void AppelRFID();
 //Fonction pour presentation finale
 static int emplacement =0;
 static int directionRobot =0;
-static int modePieton = 0;
-
+static int modePieton = 1;
 static float tableauEmplacement[25] = {
     25.4,
     57.15,
@@ -116,10 +118,10 @@ static float tableauEmplacement[25] = {
     57.15,
     57.15,
     25.4,
-    /*Tourner à droite*/,2
+    /*Tourner à droite*/2,
      50.8 ,
      50.8,
-     /*Tourner à droite*/,2
+     /*Tourner à droite*/2,
     25.45,
     7.15,
     57.15,
@@ -128,7 +130,5 @@ void ParcourirBloc(int distance);
 void ParcourirProchainBloc(int direction);
 void ModePanique();
 void ModeBluetooth();
-=======
-void setupSONAR();
-float ConvertBitToDistV2(float input);
->>>>>>> d3a977b2e4a5d8ce1e24d7a1587cf5e3b63d91c1
+void ModeAutomatisee();
+

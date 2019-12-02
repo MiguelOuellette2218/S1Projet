@@ -247,7 +247,6 @@ void ModePanique()
 void ModeBluetooth()
 {
     int input = ScanBluetooth();
-
     if (input != 0)
     {
         if (input == 1)
@@ -288,21 +287,11 @@ void ModeAutomatisee()
 {
     int input = ScanBluetooth();
 
+    ParcourirProchainBloc(0);
     if (input != 0)
-    {
-        if (input == 1)
-        {
-            //Aller au prochain point           
-             Serial.print("SENS NORMAL");
-            ParcourirProchainBloc(0);
-        }
-        else if (input == 2)
-        {
-             Serial.println("SENS INVERSE");
-            ParcourirProchainBloc(1);
-        }
+    {    
         //PANIC
-        else if (input == 4)
+         if (input == 4)
         {
              Serial.print("PPPPPAAAAANNNNNNIIIIIICCCCC");
             ModePanique();
@@ -334,22 +323,26 @@ void ParcourirProchainBloc(int direction)
         {
             tournerSurLuiMeme(1, 180, 1);
             directionRobot = direction;
+            delay(200);
         }    
-
-    if(emplacement-direction >0 &&emplacement-direction <21)
-    {
+  
         if(tableauEmplacement[emplacement-direction] == 1 )
         {
           tournerSurLuiMeme(0, 90,1);
-          emplacement++;
+            emplacement = emplacement+1;
+            delay(200);
         }
         else if(tableauEmplacement[emplacement-direction] == 2 )
         {
           tournerSurLuiMeme(1, 90,1);
-          emplacement++;
+          emplacement = emplacement+1;
+            delay(200);
         }
-
         ParcourirBloc(tableauEmplacement[emplacement-direction]);
-        emplacement++;
-    }
+        delay(200);
+
+    //Serial.println(tableauEmplacement[emplacement-direction]);
+    // avancerCm(tableauEmplacement[emplacement-direction],1,0);
+        emplacement = emplacement+1;
+    
 }
