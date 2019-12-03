@@ -153,11 +153,7 @@ void ScannerPourBalle()
 //Fonction qui est appeler lorsqu'on clique sur le bouton panique sur le telephone
 void ModePanique()
 {
-    for (size_t i = 0; i < 6; i++)
-    {
-        AX_BuzzerON(1000, 200);
-        delay(100);
-    }
+    megalovania(22);
 }
 
 //Mode de deplacement lorsque le mode de communication par bluetooth est activé
