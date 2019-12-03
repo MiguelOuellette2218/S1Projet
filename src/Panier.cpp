@@ -1,5 +1,9 @@
 #include "MyIncludes.h"
 #include <math.h>
+
+    /*
+    * Fonction qui permet de setup les sonar , car parfois des valeurs étrane apparaissait au debut
+    */
 void SetupSonar()
 {
     delay(50);
@@ -11,13 +15,15 @@ void SetupSonar()
     delay(250);
 }
 
+    /*
+    * Fonction qui convertis les bit donner par le capteur infrarouge en distance en cm
+    */
 float ConvertBitToDist(float input)
 {
     double voltage = (input*5)/1023;
-
     double dist = -13.632*pow(voltage,6) 
 
-    + 101.03*pow(voltage, 5) //Si on continue l'équation du polynome il devrait etre a la 5//
+    + 101.03*pow(voltage, 5) 
     - 246*pow(voltage,4) 
     + 135.61*pow(voltage, 3)
      + 317.15*pow(voltage, 2) +
@@ -25,6 +31,10 @@ float ConvertBitToDist(float input)
 
     return dist;
 }
+
+    /*
+    * Fonction qui convertis les bit donner par les capteurs infrarouge en distance 
+    */
 float ConvertBitToDistV2(float input) // essaie d'une fonction qui permet de trouver la distance avec un IR
 {
     float dist;
@@ -37,11 +47,15 @@ float ConvertBitToDistV2(float input) // essaie d'une fonction qui permet de tro
     return dist;
 }
 
+
+    /*
+    * Fonction qui permet de determiner si le robot est droit ou non
+    */
 int comparateurIR()
 {   
     
-    float distanceD = ConvertBitToDist(ROBUS_ReadIR(1)); // il y avait une erreur
-    float distanceG = ConvertBitToDist(ROBUS_ReadIR(0)); // il y avait une erreur
+    float distanceD = ConvertBitToDist(ROBUS_ReadIR(1)); 
+    float distanceG = ConvertBitToDist(ROBUS_ReadIR(0)); 
   
     //float capteurIRG = distanceG;
     //float capteurIRD = distanceD;
@@ -67,11 +81,11 @@ int comparateurIR()
     {
         return -2; 
     }
-    
-    
 }
 
-
+    /*
+    * Fonction qui permet d'avancer en se positionnant en milieu de 2 mur et garder cette trajectoire
+    */
 void mouvementIR ()
 {
     //definir la vitesse desirer pour utiliser la fonction 
@@ -110,7 +124,9 @@ void mouvementIR ()
     }
 }
 
-//check la distance entre le robot et la personne
+    /*
+    * Fonction qui regarde la distance entre le robot et la personne
+    */
 int PersonneDevant() 
 {
     float capteur_sonar = SONAR_GetRange(1);
@@ -149,28 +165,3 @@ void MouvementDetection() //fonction qui utilise la detection de personne
     }
 
 }
-
-/* 
-void mvmt_sonar()
-{   
-
-    distance_Sonar();
-    while (distance_Sonar() == 0)
-    {
-        mouvementIR ();
-        distance_Sonar();
-    }
-
-    while (distance_Sonar() == -1)
-    {
-        MOTOR_SetSpeed(1,0);
-        MOTOR_SetSpeed(0,0);
-        distance_Sonar();
-
-    }
-
-
-
-}
-
-*/

@@ -13,23 +13,6 @@ void setup()
 
 void loop()
 {
-
-  //ScanBluetooth();
-
-  //delay(100);
-
-  if (ROBUS_IsBumper(0)) // Bumper gauche
-  {
-   // ParcourirBloc(100);
-    
-  }
-  if (ROBUS_IsBumper(1)) // Bumper droite
-  {
-   // ParcourirBloc(100);
-   // Serial.println("Fin de parcour"); 
-  }
-  //  IsPaired();
-   
   if (modeDeplacement == 0)
   {
     ModeBluetooth();
@@ -38,9 +21,6 @@ void loop()
   {
     ModeAutomatisee();
   }
-
-
- 
 }
 
 int mainbumper()
