@@ -19,16 +19,17 @@
 */
 float MoveForward(float cm, float *speed, bool (*callback)(void))
 {
-    Serial.println("Distance à parcourir"); 
-    Serial.println(cm);   
+   // Serial.println("DEBUG// MODE MOVEFORWARD \\\\DEBUG");
+   // Serial.println("Distance à parcourir"); 
+   //Serial.println(cm);   
 
-    delay(200);
+    //delay(200);
     int32_t pulseDistance = (cm * PULSEPARTOUR) / CIRCONFERENCE;
     ENCODER_ReadReset(LEFT);
     ENCODER_ReadReset(RIGHT);
     //Init des variables
-    int time = 0;
-    int oldTime = 0;
+    unsigned long long time = 0;
+    unsigned long long oldTime = 0;
     int lastLeft = 0;
     int lastRight = 0;
     int newLeft = 0;
@@ -41,12 +42,19 @@ float MoveForward(float cm, float *speed, bool (*callback)(void))
     while ((ENCODER_Read(LEFT) < pulseDistance) || (ENCODER_Read(RIGHT) < pulseDistance))
     {
         time = millis();
+
+        //delay(50);
+        //Serial.print("Time : ");
+        //Serial.print(time);
+        //Serial.print(" - ");
+        //Serial.println(oldTime);
+
         if (time - oldTime > 49)
         {
-            
+           // Serial.println("If milli"); 
             if(PersonneDevant() == 1 && modePieton==1)
             {
-                Serial.println("Arreter pendant le mouvement"); 
+             //   Serial.println("Arreter pendant le mouvement"); 
                   
                 MOTOR_SetSpeed(LEFT, 0);
                 MOTOR_SetSpeed(RIGHT, 0); 
@@ -62,7 +70,7 @@ float MoveForward(float cm, float *speed, bool (*callback)(void))
 
             if (ENCODER_Read(LEFT) < pulseDistance - PULSEPARTOUR)
             { //Accélération
-                Serial.println("Acceleration"); 
+             //   Serial.println("Acceleration"); 
                 if (speedG + 0.05 < speed[0])
                     speedG += 0.05;
                 else
@@ -74,7 +82,7 @@ float MoveForward(float cm, float *speed, bool (*callback)(void))
             }
             else
             { //Ralentissement
-                Serial.println("Ralentissement"); 
+               // Serial.println("Ralentissement"); 
                 if (ralentissement < speedG - 0.30)
                     ralentissement += 0.05 * (speedD + speedG);
             }
@@ -91,9 +99,14 @@ float MoveForward(float cm, float *speed, bool (*callback)(void))
             MOTOR_SetSpeed(RIGHT, speedD + pSpeed[1] - ralentissement + USEROBOT);
             time = millis();
             oldTime = time;
-            Serial.println("Call de PID"); 
+            //Serial.println("Call de PID"); 
             }
         }
+        else
+        {
+           // Serial.println("if not milli"); 
+        }
+        
     }
     //TURN TO 0 MOTORS
     MOTOR_SetSpeed(LEFT, 0);
@@ -106,6 +119,7 @@ float MoveForward(float cm, float *speed, bool (*callback)(void))
 
 void ParcourirBloc(int distance)
 {
+    //Serial.println("DEBUG// MODE PARCOURIRBLOC \\\\DEBUG");
     float pSpeed[2] = {0.5, 0.5};
     float distanceParcourus = MoveForward(distance, pSpeed, false);
     float distanceRestante = distance - distanceParcourus;
@@ -118,11 +132,11 @@ void ParcourirBloc(int distance)
         {
             if (PersonneDevant() == false)
             {
-                pSpeed[0] = 0.3;
-                pSpeed[1] = 0.3;
+                pSpeed[0] = 0.5;
+                pSpeed[1] = 0.5;
                 distanceParcourus = MoveForward(distanceRestante, pSpeed, false);
-                    Serial.println("Distance Parcouru");
-                   Serial.println(distanceParcourus);
+                   // Serial.println("Distance Parcouru");
+                  // Serial.println(distanceParcourus);
                 distanceRestante = distanceRestante - distanceParcourus;
 
                 //feedbackDistance = distance -feedbackDistance;
@@ -293,23 +307,32 @@ void PID(int erreurVitesse, int erreurPosition, float *pSpeed, float speed)
 */
 void TurnNoMoving(float speed, float huitTour, bool direction)
 {
+  //  Serial.println("DEBUG // TURNNOMOVING \\\\ DEBUG");
     int pulseDistance = ((UnHuit * huitTour * PULSEPARTOUR) / CIRCONFERENCE) + 5;
     ENCODER_ReadReset(LEFT);
     ENCODER_ReadReset(RIGHT);
-    int time = 0;
-    int oldTime = 0;
+    unsigned long long time = 0;
+    unsigned long long oldTime = 0;
     int lastLeft = 0;
     int lastRight = 0;
     int newLeft = 0;
     int newRight = 0;
     float pSpeed[2] = {1, 1}; //pSpeed[0]=Speed Gauche //pSpeed[1]=Speed Droit
+
+  //  Serial.println(direction); // DEBUG
+
     if (direction)            //Turn Right
     {
         while ((ENCODER_Read(LEFT) < pulseDistance) && (ENCODER_Read(RIGHT) > (0 - pulseDistance)))
         {
             time = millis();
+          //  Serial.print((float)newLeft);
+          //  Serial.print("-");
+         //   Serial.println((float)lastLeft);     
+          
             if (time - oldTime > 20)
             {
+
                 lastLeft = newLeft;
                 lastRight = newRight;
                 newLeft = ENCODER_Read(LEFT);

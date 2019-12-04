@@ -1,4 +1,6 @@
 #include "MyIncludes.h"
+int blah = 0;
+int* modeDeplacement = &blah;
 
 void setup()
 {
@@ -9,17 +11,29 @@ void setup()
   delay(1500);
   SetupSonar();
   Bluetooth();
+  *modeDeplacement = 0;
+  Serial.println(*modeDeplacement);
 }
 
 void loop()
 {
-  if (modeDeplacement == 0)
+//float capteur_sonar = SONAR_GetRange(1);
+    
+    //Serial.println(capteur_sonar);
+
+  //modeDeplacement = 1;
+
+  //Serial.println(*modeDeplacement);
+  if (*modeDeplacement == 0)
   {
-    ModeBluetooth();
+    ModeBluetooth(modeDeplacement);
+    //Serial.println(*modeDeplacement);
+        
   }
   else
   {
-    ModeAutomatisee();
+    ModeAutomatisee(modeDeplacement);
+    //Serial.println(*modeDeplacement);  
   }
 }
 

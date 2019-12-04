@@ -8,7 +8,7 @@
 
 
 enum COULEUR {ROUGE, VERT, BLEU , JAUNE};
-static int modeDeplacement =0;
+
 /*
 *   Fonction Gab
 */
@@ -90,7 +90,7 @@ void mouvementIR ();
 int PersonneDevant();
 //void mvmt_sonar();
 float ConvertBitToDist(float input);
-#define distancePersonne 30 //Nous pouvons essaie de diminuer cette distance
+#define distancePersonne 10 
 void MouvementDetection();
 void SetupSonar();
 
@@ -109,28 +109,28 @@ static int emplacement =0;
 static int directionRobot =0;
 static int modePieton = 1;
 static float tableauEmplacement[25] = {
-    25.4,
-    57.15,
-    57.15,
-    25.4, 
+    25,
+    50,
+    50,
+    25, 
     /*Tourner à gauche*/1,
-    50.8 ,
-    50.8,
+    60 ,
+    
     /*Tourner à gauche*/1,
-    25.4,
-    57.15,
-    57.15,
-    25.4,
+    25,
+    50,
+    50,
+    25,
     /*Tourner à droite*/2,
-     50.8 ,
-     50.8,
-     /*Tourner à droite*/2,
-    25.45,
-    7.15,
-    57.15,
-    25.4};
+     60 ,
+     
+    /*Tourner à droite*/2,
+    25,
+    50,
+    50,
+    25};
 void ParcourirBloc(int distance);
 void ParcourirProchainBloc(int direction);
 void ModePanique();
-void ModeBluetooth();
-void ModeAutomatisee();
+void ModeBluetooth(int* modeDeplacement);
+void ModeAutomatisee(int* modeDeplacement);

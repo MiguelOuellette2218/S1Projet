@@ -158,7 +158,7 @@ void ModePanique()
 
 //Mode de deplacement lorsque le mode de communication par bluetooth est activé
 //Cette fonction va être appeler à chaque loop pour prendre des decisions
-void ModeBluetooth()
+void ModeBluetooth(int *modeDeplacement)
 {
     int input = ScanBluetooth();
     if (input != 0)
@@ -181,27 +181,30 @@ void ModeBluetooth()
             ModePanique();
         }
         //MODE AUTONOME
+         else if (input == 6)
+        {
+            Serial.print("MODE Bluetooth");
+            *modeDeplacement = 0;
+            Serial.println(*modeDeplacement);
+        }
+        //MODE Autonome
         else if (input == 5)
         {
-            Serial.print("MODE Autonome");
-            modeDeplacement = 1;
-        }
-        //MODE BLUETOOTH
-        else if (input == 6)
-        {
-            Serial.print("MODE BLUETOOTH");
-            modeDeplacement = 0;
+            Serial.print("MODE autonome");
+            *modeDeplacement = 1;
+            Serial.println(*modeDeplacement);
         }
     }
 }
 
 //Mode de deplacement lorsque le mode de communication par bluetooth est desactivé
 //Cette fonction va être appeler à chaque loop pour prendre des decisions basé sur le mode automatisé
-void ModeAutomatisee()
+void ModeAutomatisee(int* modeDeplacement)
 {
     int input = ScanBluetooth();
-
-    ParcourirProchainBloc(0);
+    //Serial.print("call mode automatique");
+    //int input = 0;
+    
     if (input != 0)
     {    
         //PANIC
@@ -210,19 +213,23 @@ void ModeAutomatisee()
              Serial.print("PPPPPAAAAANNNNNNIIIIIICCCCC");
             ModePanique();
         }
-        //MODE AUTONOME
-        else if (input == 5)
-        {
-            Serial.print("MODE Autonome");
-            modeDeplacement = 1;
-        }
-        //MODE BLUETOOTH
+        //MODE bluetooth
         else if (input == 6)
         {
-            Serial.print("MODE BLUETOOTH");
-            modeDeplacement = 0;
+            Serial.print("MODE Bluetooth");
+            *modeDeplacement = 0;
+            Serial.println(*modeDeplacement);
+        }
+        //MODE Autonome
+        else if (input == 5)
+        {
+            Serial.print("MODE autonome");
+            *modeDeplacement = 1;
+            Serial.println(*modeDeplacement);
         }
     }
+
+    ParcourirProchainBloc(0);
 }
 
 //Fonction qui permet d'aller au prochain bloc dans le parcours final ,à
@@ -230,34 +237,79 @@ void ModeAutomatisee()
 //une directon de -1 s'ignifie dans la direction opposé
 void ParcourirProchainBloc(int direction)
 {
+    //Serial.println("DEBUG// MODE PARCOURIRPROCHAINBLOC \\\\DEBUG");
     //TODO:
         //Implementer le tableau de distance
         //Implementer les virages ainsi que les direction differentes
         if(direction!=directionRobot)
         {
             //tournerSurLuiMeme(1, 180, 1);
-            TurnNoMoving(0.5,4,1);
+            TurnNoMoving(0.3,3.9,1);
             directionRobot = direction;
-            delay(200);
+           // delay(200);
         }    
   
         if(tableauEmplacement[emplacement-direction] == 1 )
         {
-         TurnNoMoving(0.5,2,0);
-            emplacement = emplacement+1;
-            delay(200);
+         if(direction == 1)
+            {
+            //Serial.println("Tourner a gauche inverse ?");
+            //tournerSurLuiMeme(LEFT,90,1);
+            TurnNoMoving(0.3,1.9,1);
+          emplacement = emplacement-1;
+            }
+            else
+            {
+              //  Serial.println("Tourner a gauche droit ?");
+                TurnNoMoving(0.3,1.9,0);
+          emplacement = emplacement+1;
+            }
         }
         else if(tableauEmplacement[emplacement-direction] == 2 )
         {
-          TurnNoMoving(0.5,2,1);
+            if(direction == 1)
+            {
+              //  Serial.println("Tourner a droite inverse ?");
+            TurnNoMoving(0.3,1.9,0);
+          emplacement = emplacement-1;
+            }
+            else
+            {
+              //  Serial.println("Tourner a droite inverse ?");
+                TurnNoMoving(0.3,1.9,1);
+                
           emplacement = emplacement+1;
-            delay(200);
+            }
+            
+          //  tournerSurLuiMeme(RIGHT, 90, 1);
+          
+           // delay(200);
         }
-        ParcourirBloc(tableauEmplacement[emplacement-direction]);
-        delay(200);
+
+        if(emplacement-direction < 20)
+        {  
+      
+         if(direction == 1)
+            {
+               // Serial.println("Avancer inverse");
+            ParcourirBloc(tableauEmplacement[emplacement-direction]);
+                emplacement = emplacement-1;
+            }
+            else
+            {
+                Serial.println("Avancer droite");
+                ParcourirBloc(tableauEmplacement[emplacement-direction]);    
+                emplacement = emplacement+1;
+            }
+    
+        }
+        
+        
+        //delay(200);
 
     //Serial.println(tableauEmplacement[emplacement-direction]);
     // avancerCm(tableauEmplacement[emplacement-direction],1,0);
-        emplacement = emplacement+1;
+
+    
     
 }

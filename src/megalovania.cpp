@@ -7,16 +7,16 @@
 
 int melody[] = {
   NOTE_D6, NOTE_D6, NOTE_D5, NOTE_A6,0, NOTE_GS6, NOTE_G6, NOTE_F6,0, NOTE_D6, NOTE_F6, NOTE_G6,0,
-  NOTE_C6, NOTE_C6, NOTE_D5, NOTE_A6,0, NOTE_GS6, NOTE_G6, NOTE_F6,0, NOTE_D6, NOTE_F6, NOTE_G6,0,
+  NOTE_C6, NOTE_C6, NOTE_D5, NOTE_A6,0, NOTE_GS6, NOTE_G6, NOTE_F6,0, NOTE_D6, NOTE_F6, NOTE_G6,0/*,
   NOTE_B7, NOTE_B7, NOTE_D5, NOTE_A6,0, NOTE_GS6, NOTE_G6, NOTE_F6,0, NOTE_D6, NOTE_F6, NOTE_G6,0,
-  NOTE_AS7, NOTE_AS7, NOTE_D5,NOTE_A6,0, NOTE_GS6, NOTE_G6, NOTE_F6,0, NOTE_D6, NOTE_F6, NOTE_G6,0
+  NOTE_AS7, NOTE_AS7, NOTE_D5,NOTE_A6,0, NOTE_GS6, NOTE_G6, NOTE_F6,0, NOTE_D6, NOTE_F6, NOTE_G6,0*/
 };
 
 int noteDurations[] = {
   8,8,4,4,8,4,4,8,8,8,8,4,8,
+  8,8,4,4,8,4,4,8,8,8,8,4,8/*,
   8,8,4,4,8,4,4,8,8,8,8,4,8,
-  8,8,4,4,8,4,4,8,8,8,8,4,8,
-  8,8,4,4,8,4,4,8,8,8,8,4,8
+  8,8,4,4,8,4,4,8,8,8,8,4,8*/
 };
 
 // note durations: 4 = quarter note, 8 = eighth note, etc.:
@@ -28,7 +28,7 @@ int noteDurations[] = {
 void megalovania(int pin) {
 
   // iterate over the notes of the melody:
-  for (int thisNote = 0; thisNote < 52; thisNote++) {
+  for (int thisNote = 0; thisNote < 26; thisNote++) {
 
     // to calculate the note duration, take one second divided by the note type.
     //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
