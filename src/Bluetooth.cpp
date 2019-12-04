@@ -48,7 +48,7 @@ void BluetoothRead(char *Tableau)
 
     int time = millis();
     int oldTime = time;
-    for (int ssssssi = 0; time - oldTime < 1000;)
+    for (int i = 0; time - oldTime < 1000;)
     {
         time = millis();
         if (Serial1.available())

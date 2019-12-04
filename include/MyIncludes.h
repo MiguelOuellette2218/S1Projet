@@ -4,6 +4,8 @@
 #include <stdio.h >
 #include <string.h>
 
+#include "megalovania.h"
+
 
 enum COULEUR {ROUGE, VERT, BLEU , JAUNE};
 static int modeDeplacement =0;
