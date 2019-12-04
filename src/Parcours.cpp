@@ -175,7 +175,7 @@ void ModeBluetooth()
         }
         else if (input == 2)
         {
-             Serial.println("SENS INVERSE");
+            Serial.println("SENS INVERSE");
             ParcourirProchainBloc(1);
         }
         //PANIC
@@ -239,20 +239,21 @@ void ParcourirProchainBloc(int direction)
         //Implementer les virages ainsi que les direction differentes
         if(direction!=directionRobot)
         {
-            tournerSurLuiMeme(1, 180, 1);
+            //tournerSurLuiMeme(1, 180, 1);
+            TurnNoMoving(0.5,4,1);
             directionRobot = direction;
             delay(200);
         }    
   
         if(tableauEmplacement[emplacement-direction] == 1 )
         {
-          tournerSurLuiMeme(0, 90,1);
+         TurnNoMoving(0.5,2,0);
             emplacement = emplacement+1;
             delay(200);
         }
         else if(tableauEmplacement[emplacement-direction] == 2 )
         {
-          tournerSurLuiMeme(1, 90,1);
+          TurnNoMoving(0.5,2,1);
           emplacement = emplacement+1;
             delay(200);
         }

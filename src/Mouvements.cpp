@@ -46,8 +46,11 @@ float MoveForward(float cm, float *speed, bool (*callback)(void))
             
             if(PersonneDevant() == 1 && modePieton==1)
             {
+                Serial.println("Arreter pendant le mouvement"); 
+                  
                 MOTOR_SetSpeed(LEFT, 0);
                 MOTOR_SetSpeed(RIGHT, 0); 
+
 
                 float retourDistance = (ENCODER_Read(LEFT)*CIRCONFERENCE)/PULSEPARTOUR;
               // float retourDistance = ENCODER_Read(LEFT);
@@ -59,6 +62,7 @@ float MoveForward(float cm, float *speed, bool (*callback)(void))
 
             if (ENCODER_Read(LEFT) < pulseDistance - PULSEPARTOUR)
             { //Accélération
+                Serial.println("Acceleration"); 
                 if (speedG + 0.05 < speed[0])
                     speedG += 0.05;
                 else
@@ -70,6 +74,7 @@ float MoveForward(float cm, float *speed, bool (*callback)(void))
             }
             else
             { //Ralentissement
+                Serial.println("Ralentissement"); 
                 if (ralentissement < speedG - 0.30)
                     ralentissement += 0.05 * (speedD + speedG);
             }
@@ -86,6 +91,7 @@ float MoveForward(float cm, float *speed, bool (*callback)(void))
             MOTOR_SetSpeed(RIGHT, speedD + pSpeed[1] - ralentissement + USEROBOT);
             time = millis();
             oldTime = time;
+            Serial.println("Call de PID"); 
             }
         }
     }
@@ -120,8 +126,8 @@ void ParcourirBloc(int distance)
                 distanceRestante = distanceRestante - distanceParcourus;
 
                 //feedbackDistance = distance -feedbackDistance;
-                Serial.println("distanceRestante");
-                Serial.println(distanceRestante);
+                // Serial.println("distanceRestante");
+                // Serial.println(distanceRestante);
             }
             else
             {
